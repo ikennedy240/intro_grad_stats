@@ -1,0 +1,57 @@
+state,total_cases,total_deaths,earliest_case,State code GEOID,State code STUSPS,Restriction details include,Statewide mandated stay at home order?,Urgency of restrictions,Effective date of executive restriction detailed,pop_2020,pop_2021,pop_2022,earliest_case_month,restrictions
+Alabama,1648385,21631,2020-03-13,1,AL,"Suspension of certain public gatherings, closure of schools, and closure of certain businesses",No,Mandatory,3/19/20,5031362,5049846,5074296,2020-3,medium
+Alaska,308893,1438,2020-03-12,2,AK,Shelter-in-place,Yes,Mandatory,3/28/20,732923,734182,733583,2020-3,high
+American Samoa,8321,34,2021-09-22,NA,NA,NA,NA,NA,NA,NA,NA,NA,2021-9,NA
+Arizona,2451062,33190,2020-01-26,4,AZ,Stay at home,Yes,Mandatory,3/31/20,7179943,7264877,7359197,2020-1,high
+Arkansas,1008303,13068,2020-03-11,5,AR,"Closure of schools and certain businesses, ban on gatherings of 10 or more, and ban on dine-in service in restaurants",No,Mandatory,3/27/20,3014195,3028122,3045637,2020-3,medium
+California,12169158,104277,2020-01-25,6,CA,Stay at home,Yes,Mandatory,3/19/20,39501653,39142991,39029342,2020-1,high
+Colorado,1771010,14245,2020-03-05,8,CO,Stay at home,Yes,Mandatory,3/26/20,5784865,5811297,5839926,2020-3,high
+Connecticut,978456,12270,2020-03-08,9,CT,Stay at home,Yes,Mandatory,3/23/20,3597362,3623355,3626205,2020-3,high
+Delaware,332861,3352,2020-03-11,10,DE,Shelter-in-place,Yes,Mandatory,3/24/20,992114,1004807,1018396,2020-3,high
+District of Columbia,178226,1487,2020-03-07,NA,NA,NA,NA,NA,NA,670868,668791,671803,2020-3,NA
+Florida,7542869,87141,2020-03-01,12,FL,Stay at home,Yes,Mandatory,4/2/20,21589602,21828069,22244823,2020-3,high
+Georgia,2984923,41055,2020-03-02,13,GA,Shelter-in-place,Yes,Mandatory,4/3/20,10729828,10788029,10912876,2020-3,high
+Guam,62077,421,2020-03-15,NA,NA,NA,NA,NA,NA,NA,NA,NA,2020-3,NA
+Hawaii,372408,1851,2020-03-06,15,HI,Stay at home,Yes,Mandatory,3/25/20,1451043,1447154,1440196,2020-3,high
+Idaho,522919,5456,2020-03-13,16,ID,Stay at home,Yes,Mandatory,3/25/20,1849202,1904314,1939033,2020-3,high
+Illinois,4107931,41618,2020-01-24,17,IL,Stay at home,Yes,Mandatory,3/21/20,12786580,12686469,12582032,2020-1,high
+Indiana,2054533,26179,2020-03-06,18,IN,Stay at home,Yes,Mandatory,3/24/20,6788799,6813532,6833037,2020-3,high
+Iowa,907421,10770,2020-03-08,19,IA,"Closure of certain businesses, prohibition of gatherings of 10 people or more, and requiring restaurants to use takeout or delivery-only methods",No,Mandatory,3/16/20,3190571,3197689,3200517,2020-3,medium
+Kansas,940815,10232,2020-03-07,20,KS,Stay at home,Yes,Mandatory,3/30/20,2937919,2937922,2937150,2020-3,high
+Kentucky,1723443,18348,2020-03-06,21,KY,"""Healthy at home"" order, restaurants are open for eat-out options, and six-foot physical distancing is required",No,Mandatory,3/26/20,4507445,4506589,4512310,2020-3,low
+Louisiana,1580709,18835,2020-03-09,22,LA,Stay at home,Yes,Mandatory,3/23/20,4651664,4627098,4590241,2020-3,high
+Maine,319997,2981,2020-03-12,23,ME,Stay at home,Yes,Mandatory,4/2/20,1363557,1377238,1385340,2020-3,high
+Maryland,1369930,16672,2020-03-05,24,MD,Stay at home,Yes,Mandatory,3/30/20,6173205,6174610,6164660,2020-3,high
+Massachusetts,2230150,24441,2020-02-01,25,MA,"Closed bars and restaurants, limited gatherings, and a stay at home advisory",No,Mandatory,3/24/20,6995729,6989690,6981974,2020-2,high
+Michigan,3068195,42311,2020-03-10,26,MI,Stay at home,Yes,Mandatory,3/24/20,10069577,10037504,10034113,2020-3,high
+Minnesota,1784263,14964,2020-03-06,27,MN,Shelter-in-place,Yes,Mandatory,3/27/20,5709852,5711471,5717184,2020-3,high
+Mississippi,993035,13431,2020-03-11,28,MS,Stay at home,Yes,Mandatory,4/3/20,2958141,2949586,2940057,2020-3,high
+Missouri,1794207,23998,2020-03-07,29,MO,Stay at home,Yes,Mandatory,4/6/20,6153998,6169823,6177957,2020-3,high
+Montana,330875,3701,2020-03-13,30,MT,Stay at home,Yes,Mandatory,3/28/20,1087075,1106227,1122867,2020-3,high
+Nebraska,570835,5068,2020-02-17,31,NE,Limited social gatherings and an out-of-state travel ban,No,Mandatory,3/17/20,1962642,1963554,1967923,2020-2,low
+Nevada,892814,12093,2020-03-05,32,NV,Stay at home,Yes,Mandatory,4/1/20,3115648,3146402,3177772,2020-3,high
+New Hampshire,379689,3018,2020-03-02,33,NH,Stay at home,Yes,Mandatory,3/27/20,1378587,1387505,1395231,2020-3,high
+New Jersey,3057442,36097,2020-03-04,34,NJ,Stay at home,Yes,Mandatory,3/21/20,9271689,9267961,9261699,2020-3,high
+New Mexico,673541,9110,2020-03-11,35,NM,Stay at home,Yes,Mandatory,3/24/20,2118390,2116677,2113344,2020-3,high
+New York,6805271,80138,2020-03-01,36,NY,Stay at home,Yes,Mandatory,3/22/20,20108296,19857492,19677151,2020-3,high
+North Carolina,3481732,29746,2020-03-03,37,NC,Stay at home,Yes,Mandatory,3/30/20,10449445,10565885,10698973,2020-3,high
+North Dakota,288106,2529,2020-03-11,38,ND,"Nonessential businesses and schools close, restaurants limit service, mandatory quarantine for individuals who test positive and citizens returning from states on the CDC's widespread COVID-19 list, but no stay at home order",No,Mandatory,3/20/20,779518,777934,779261,2020-3,high
+Northern Mariana Islands,13395,41,2020-03-28,NA,NA,NA,NA,NA,NA,NA,NA,NA,2020-3,NA
+Ohio,3415254,42061,2020-03-09,39,OH,Stay at home,Yes,Mandatory,3/23/20,11797517,11764342,11756058,2020-3,high
+Oklahoma,1295832,16549,2020-03-06,40,OK,"""Safer at home"" policy for vulnerable populations, gatherings of 10 or more prohibited, and nonessential businesses closed",No,Mandatory,3/24/20,3964912,3991225,4019800,2020-3,medium
+Oregon,967156,9451,2020-02-28,41,OR,Stay at home,Yes,Mandatory,3/23/20,4244795,4256301,4240137,2020-2,high
+Pennsylvania,3539135,50701,2020-03-06,42,PA,Stay at home,Yes,Mandatory,4/1/20,12994440,13012059,12972008,2020-3,high
+Puerto Rico,1139243,5848,2020-03-13,NA,NA,NA,NA,NA,NA,3281557,3262693,3221789,2020-3,NA
+Rhode Island,461788,3915,2020-03-01,44,RI,Stay at home,Yes,Mandatory,3/28/20,1096345,1096985,1093734,2020-3,high
+South Carolina,1840458,20192,2020-03-06,45,SC,Stay at home,Yes,Mandatory,4/7/20,5131848,5193266,5282634,2020-3,high
+South Dakota,280525,3222,2020-03-10,46,SD,People over the age of 60 and those with respiratory or cardiac conditions are advised to remain home and enclosed retail businesses should modify business practices,No,Mandatory,3/19/20,887799,896164,909824,2020-3,medium
+Tennessee,2459152,29035,2020-03-05,47,TN,Stay at home,Yes,Mandatory,3/31/20,6925619,6968351,7051339,2020-3,high
+Texas,8447168,94518,2020-02-12,48,TX,Stay at home,Yes,Mandatory,4/2/20,29232474,29558864,30029572,2020-2,high
+Utah,1093049,5316,2020-02-25,49,UT,"Work from home encouraged, travel should be limited to essential, and businesses and nonprofits should respond in a flexible way",No,Mandated for certain counties,3/30/20,3283785,3339113,3380800,2020-2,low
+Vermont,153198,939,2020-03-07,50,VT,Stay at home,Yes,Mandatory,3/24/20,642893,646972,647064,2020-3,high
+Virgin Islands,24838,130,2020-03-14,NA,NA,NA,NA,NA,NA,NA,NA,NA,2020-3,NA
+Virginia,2298300,23782,2020-03-07,51,VA,Stay at home,Yes,Mandatory,3/30/20,8636471,8657365,8683619,2020-3,high
+Washington,1940704,15905,2020-01-21,53,WA,Stay at home,Yes,Mandatory,3/23/20,7724031,7740745,7785786,2020-1,high
+West Virginia,645710,8132,2020-03-17,54,WV,Stay at home,Yes,Mandatory,3/24/20,1791420,1785526,1775156,2020-3,high
+Wisconsin,2014524,16485,2020-02-05,55,WI,Stay at home,Yes,Mandatory,3/25/20,5896271,5880101,5892539,2020-2,high
+Wyoming,185800,2014,2020-03-11,56,WY,Closure of businesses and schools,No,Mandatory,3/27/20,577605,579483,581381,2020-3,medium
