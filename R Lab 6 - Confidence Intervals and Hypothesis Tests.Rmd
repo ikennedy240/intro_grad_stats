@@ -1,0 +1,448 @@
+---
+title: "R Lab 6 - Confidence Intervals and Hypothesis Tests"
+author: Ian Kennedy
+date: "September 29, 2023"
+output:
+  html_document:
+---
+
+# Introduction
+In this lab we will:  
+1. Learn about a new file format: R markdown  
+2. Practice some more data cleaning  
+3. Estimate a population mean using a confidence interval
+4. Visualize the Central Limit Theorem using confidence intervals
+5. Perform hypothesis tests for the difference between population means
+  
+For more information on the techniques and concepts illustrated in this lab, see [Hands-On Programming in R](https://rstudio-education.github.io/hopr/basics.html)
+
+## PART 1: R Markdown Files
+
+So far we've been using files ending in '.R', which are usually called R scripts. Starting today, with Lab 6, we'll use files ending in '.Rmd' which are called R markdown files. Markdown is 'markup language' which lets you write files in plain text (the way you're probably viewing this file in the source pane in R studio), but use those plain text files to produce beautifully formatted HTML and pdf reports Rmarkdown is a markdown format that allows you to embed R code into a markdown file so that you can use the code, visualizations, output, and other results in your reports. The process of converting your code-embedded plain-text file to an HTML file is called 'knitting', and we'll cover it at the end of this lab. Read more about markdown [here](https://rmarkdown.rstudio.com/lesson-1.html), or more about Rmarkdown [here](https://www.markdownguide.org/). That link format might look weird in R studio, but once you 'Knit' this document together, you'll see that the word 'here' in square brackets gets turned into a link to the appropriate url in parentheses.
+
+### Chunks
+
+The key feature of Rmarkdown is that it enables you to embed code 'chunks' into the document. When used with R studio, the chunks become cute little sections of code that you can run all at once. When you knit the document, you have a lot of control over how, or whether, the code chunk runs and what to do with its output. 
+
+Here's a chunk:
+
+```{r My First Chunk}
+print("Hello World")
+```
+
+By default, a chunk's code and the code's output, including warnings, messages, and results, will be included in the knitted file. But you can change this behavior in the 'chunk options' at the top of the chunk.
+
+
+For instance we can hide the code while still showing the result by setting 'echo=FALSE' in the chunk options, like for this plot of a normal distribution with mean 50 and sd 10.
+
+```{r A silent chunk, echo=FALSE, fig.cap="N(50,10)"}
+## The code in this chunk will run, and we'll see the results, but this part will be hidden
+plot(1:100, dnorm(1:100,50,10))
+```
+
+You might also want to run the code silently to load data or make a variable, or look at something while you're working without including it in your final file. You can set 'include=FALSE' to hide both the code and the output from the knitted file. There won't be any output, but the code _will_ run.
+
+```{r An excluded chunk, include=FALSE}
+## The code in this chunk will run, and we'll see the results, but this part will be hidden
+# Maybe I want to, for some reason, look at a bunch of odd numbers:
+odd_numbers <- as.integer((0:100*2)+1)
+odd_numbers
+```
+If you run that code chunk, you'll see the output, but it won't be there if you knit
+
+You might also have some chunks that you don't want to run when you knit. Maybe they're just for testing or you want to just show the code or maybe they don't work yet and you want to test knitting. Setting 'eval=FALSE' in the chunk options will skip the chunk while knitting.
+
+```{r A chunk that will not run, eval=FALSE}
+## The code in this chunk will run but it will display in the file -- it'll just be inert
+plot(1:100, dnorm(1:100,50,10))
+```
+
+You can combine different chunk options, like setting echo=FALSE, eval=FALSE to completely hide code and not have it run. There are some other options too, for instance that can silence messages or warnings but still keep the output.  
+
+
+<!-- This is a hidden comment telling you that the dashes above make a line -->  
+See there's nothing above here!!   
+
+
+## PART 2: Practice a bit more data cleaning
+
+For this lab we'll use the data prepared for the "Neighborhoods and Health" topic. This file combines data from the PLACES data which contains information on the health characteristics of populations within census tracts (neighborhoods) and NaNDA data which brings together information on the demographic, economic, social, and ecological characteristics of these neighborhoods. The datafile for this class includes a random sample of 3,000 census tracts drawn from the population of all 74k census tracts in the US. See more about the data using the resources on the course webpage.
+
+
+Once you download the data to your working directory, opening the file is easy:
+
+
+```{r 2.1, include=FALSE}
+# setting include = FALSE because the list of this is long
+# the knitted file will still have access to the data though :)
+library(tidyverse)
+load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods and Health" project
+glimpse(PLACES_NaNDA_sample) # get a list of the variables in the dataframe
+```
+
+
+In this example I am interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.  
+Do any necessary cleaning on our variables of interest  
+some variables I'm interested in from the data:  
+astma = # people with asthma per 1,000 population. 
+pov13_17 = Proportion people w/ income past 12 months below the federal poverty line
+
+Let's look at a summary of those data sets
+```{r 2.2}
+print("ppov13_17")
+summary(PLACES_NaNDA_sample$ppov13_17)
+print("asthma")
+summary(PLACES_NaNDA_sample$asthma)
+```
+Looks like there are some cases with missing information on the key variables -- note the "NA's" row in the summary for ppov13_17 -- so we need to to create a clean version of the dataset that includes only those with non-missing (!is.na) on the variables included in our analysis.
+
+So we need to take our data, then filter it to only the rows where those values are not NA. Then, for simplicity, we'll just keep a place ID and the two variables we're interested in.
+
+Use the instructions in 2.3 to write code that will make a new object called 'clean_places'. Look to the hints for... hints
+
+```{r 2.3}
+# use the assignment operator to assign the results of our code to a new dataframe 
+
+# filter the rows to only include non-NA values on ppov13_17 and asthma
+
+# select only the columns LocationID, ppov13_17 and asthma
+```
+
+
+## PART 3: Estimate a population mean using a confidence interval
+
+The data contain just a random sample of census tracts. I am interested in drawing conclusions about the entire population of (all) census tracts. Here I will us the "t.test" function to create confidence intervals to estimate the POPULATION mean for asthma prevalence and poverty rate.  
+
+Note that, because the original version of this notebook doesn't have a clean_places variable, it won't be able to knit this chunk until you fill in appropriate code in 2.3. So I've excluded this chunk with eval=FALSE. Change it to eval=TRUE if your 2.3 code works.
+
+```{r 3.1, eval=FALSE}
+poverty_CI <- t.test(clean_places$ppov13_17) # t.test returns conf interval of mean
+poverty_CI  # printing the confidence interval
+```
+  
+Make a new chunk (use Cmd + Option + I on mac, Ctrl + Alt + I on PC), label it 3.2, and write code that will do a t test to estimate the population mean, with a confidence interval, for asthma.
+
+## Part 4: Visualize the Central Limit Theorem using confidence intervals
+
+One of the big challenges with confidence intervals is their precise interpretation. In class, we've discussed that the central limit theorem allows us to say that, for a 95% confidence interval, there is a 95% chance that the confidence interval includes the population mean. Why can we say that? Imagine the sampling distribution -- the distribution we simulated in Lab 5 of a large (infinite) number of samples of size N drawn from some population -- we have a distribution of means. Now, for each of those means, imagine calculating 95% confidence interval, say using the t.test function in R as in Part 3 of this lab. If we take a very large (infinite) number of such samples with such confidence intervals, 95% of them (over the long run) will have confidence intervals that include the true population mean. So, if we consider our sample as a random draw from the sampling distribution, then there's a 0.95 probability that we'll get one of the samples which has a confidence interval that contains the population mean. Let's simulate it to find out if it really works. We'll build on our 'for' loop from Lab 5.
+
+We'll start with what happens inside the loop, and then you'll build the loop for it.
+
+We're going to set up these vectors first:
+```{r 4.0 set up for the central limit test, include=FALSE}
+# we need to load the acs data 
+acs_df <- read_csv('data/tract21_inc_rent.csv')
+rent_mu <- acs_df$rent %>% mean(na.rm = TRUE)
+# one vector for our sample means, just like before
+smean <- c()
+# one for the lowest point on the sample confidence interval
+slow <- c()
+# one for the highest point on the sample confidence interval
+shigh <- c()
+
+# setting n = 100 for a larger sample size
+n = 100
+# eventually this i will be in the for loop
+# but for now, we'll set it manually to 0, since we'll increase it by one
+# everytime we run the next chunk
+i = 0
+```
+
+Now if you run chunk 4.1 repeatedly, you should get a plot that gradually gets more and more error bars on it. How often do the errorbars overlap the mean? How many times do you have to run it before you get one that doesn't overlap the population mean? What happens to the mean of sample means (the dashed line) relative to the population mean as you run this repeatedly?  
+
+```{r 4.1 testing the central limit theorem, fig.cap="Figure 4.1 Samples from the sampling distribution"}
+# start by 'incrementing' i
+# let's make i bigger by 1
+i <- i+1
+
+# this code is from 4.1
+rent_sample <- acs_df %>% filter(!is.na(rent)) %>%
+  sample_n(n)
+# REPLACING MEAN WITH T.TEST
+s_ttest <- t.test(rent_sample$rent)
+# extract the estimate of the mean
+smean[i] <- s_ttest$estimate
+# the low conf.estimate
+slow[i] <- s_ttest$conf.int[1]
+ # and the high conf.estimate
+shigh[i] <- s_ttest$conf.int[2]
+
+smean_mean <- mean(smean)
+
+# now we'll put these in a tibble and plot
+tibble(i = 1:i, smean, slow, shigh) %>%
+  # make a variable that changes the color if the ci doesn't include the population mean
+  mutate(color = if_else(slow > rent_mu | shigh < rent_mu, 'Mean Outside CI', 'Mean Inside CI')) %>%
+  ggplot(aes(smean, xmin = slow, xmax = shigh, y = i, color = color))+
+  geom_point(alpha = .5)+
+  geom_vline(aes(xintercept = rent_mu, linetype = 'Population Mean'),color = 'green', linewidth = 1)+
+  geom_vline(aes(xintercept = smean_mean, linetype = 'Sample Mean'), color = 'gray', linewidth = 1)+
+  geom_errorbarh(alpha = .5)+
+  theme_classic()
+
+```
+Figure 4.1 includes `r i` samples from the sampling distribution for tract median rents.
+Note a cool trick above, by putting r i inside 'ticks', the knit document will include the value for the variable i at this point in the document.
+
+We can use similar format to have in-line calculations so that we don't have to edit the numbers in the text each time we remake the code. For example, I can report the population mean (which won't change, but has too many decimal places) and the sampling distribution mean (which will):
+
+<!-- Look! there are functions right there in the text, but they'll be evaluated and their _results_ will be what people see. Also, this is a comment and won't show in the knitted document. -->
+
+Population mean: `r round(rent_mu,2)`
+Sampling Distribution Mean: `r round(smean_mean,2)`
+
+Ok, now it's time to put that in a loop and run, say, one hundred samples from the sample mean.
+
+```{r 4.2 For Loop Time, fig.cap="Figure 4.2 MORE Samples from the sampling distribution"}
+# redo the setup
+
+# setting n = 100 for a larger sample size
+# but see what happens with different n
+n = 100
+
+# one vector for our sample means, just like before
+smean <- c()
+# one for the lowest point on the sample confidence interval
+slow <- c()
+# one for the highest point on the sample confidence interval
+shigh <- c()
+
+for(i in 1:100){
+# this code is from 4.1
+  rent_sample <- acs_df %>% filter(!is.na(rent)) %>%
+    sample_n(n)
+  # REPLACING MEAN WITH T.TEST
+  s_ttest <- t.test(rent_sample$rent)
+  # extract the estimate of the mean
+  smean[i] <- s_ttest$estimate
+  # the low conf.estimate
+  slow[i] <- s_ttest$conf.int[1]
+   # and the high conf.estimate
+  shigh[i] <- s_ttest$conf.int[2]
+}
+smean_mean <- mean(smean)
+
+# now we'll put these in a tibble and plot
+tibble(i = 1:i, smean, slow, shigh) %>%
+  # make a variable that changes the color if the ci doesn't include the population mean
+  mutate(color = if_else(slow > rent_mu | shigh < rent_mu, 'Mean Outside CI', 'Mean Inside CI')) %>%
+  ggplot(aes(smean, xmin = slow, xmax = shigh, y = i, color = color))+
+  geom_point(alpha = .5)+
+  geom_vline(aes(xintercept = rent_mu, linetype = 'Population Mean'),color = 'green', linewidth = 1)+
+  geom_vline(aes(xintercept = smean_mean, linetype = 'Sample Mean'), color = 'gray', linewidth = 1)+
+  geom_errorbarh(alpha = .5)+
+  theme_classic()
+
+
+```
+Figure 4.2 includes `r i` samples from the sampling distribution. As long as the number of samples is pretty high, the population mean and the sampling mean should be similar:
+
+Population mean: `r round(rent_mu,2)`
+Sampling Distribution Mean: `r round(smean_mean,2)`
+
+As in Figure 4.1, samples with a t.test-based 95% confidence interval (95% CI) that _does not_ include the true population mean should show up in blue (or teal or something). If you ran 4.2 with 100 samples, it's likely that there were at least a few of them with CIs that didn't include the population mean. If we were unlucky enough to get one of _those_ samples, our point estimate of the population mean would be off by a fair bit AND our confidence interval would not include the population mean. 
+
+Based on the portion of the sampling distribution you have in 4.2 (remember, the real sampling distribution for n=100 includes all of the possible samples of 100), what is the probability of drawing a sample that has a 95% CI that _does not_ include the true population mean? What is the probability of drawing a sample that has a 95% CI that _does_ include the true population mean?
+
+<!-- look! I can write \mu to make a greek mu! -->
+P($\mu$ in CI) =  
+P($\mu$ NOT in CI) =  
+
+This gets us closer to what we mean when we're talking about a frequentest confidence interval. We're imagining that the sample we have was drawn--randomly--from the sampling distribution (all possible samples from our population with the same n as our sample). Based on that assumption, the 95% thing says that there's a 95% chance that we drew one of the samples that had a 95% CI that included the population mean.  
+
+But wait! Is it really 95%? It's fairly likely that the probability that $\mu$ was in the CI that you calculated above didn't equal 95. That's because we only looked at 100 samples from the sampling distribution. If we look at more, say 10K, we can plot the probability and see how it gets closer and closer to 0.95 as we look at more samples. Remember, this takes about a minute to run.
+
+```{r 4.3 More loops! More samples, fig.cap="Figure 4.3 Asymptotic Probability of a CI containing the population mean"}
+# redo the setup
+
+# setting n = 100 for a larger sample size
+# but see what happens with different n
+n = 100
+
+# one vector for our sample means, just like before
+smean <- c()
+# one for the lowest point on the sample confidence interval
+slow <- c()
+# one for the highest point on the sample confidence interval
+shigh <- c()
+
+for(i in 1:1e4){ 
+# this code is from 4.1
+  rent_sample <- acs_df %>% filter(!is.na(rent)) %>%
+    sample_n(n)
+  # REPLACING MEAN WITH T.TEST
+  s_ttest <- t.test(rent_sample$rent)
+  # extract the estimate of the mean
+  smean[i] <- s_ttest$estimate
+  # the low conf.estimate
+  slow[i] <- s_ttest$conf.int[1]
+   # and the high conf.estimate
+  shigh[i] <- s_ttest$conf.int[2]
+}
+smean_mean <- mean(smean)
+
+tibble(i = 1:i, smean, slow, shigh) %>%
+  # make a variable that is true if \mu is in the ci
+  mutate(included = (slow < rent_mu) & (shigh > rent_mu),
+         success = cumsum(included),
+         prob = success/i) %>% 
+  ggplot(aes(i,prob))+
+  geom_line()+
+  geom_hline(yintercept = 0.95)
+```
+
+I don't know about you, but for me, the true value ends up actually being 94.4%. Oh, whoops, spoiler alert. 
+
+
+OK, now it's your turn to try this out. One of the big claims about the central limit theorm is that, for large enough samples (>30), the sampling distribution is normal (and therefore we can estimate the probabilities) _even when the population distribution is not normal_. I'd like you to test that using a similar method that we used in 4.1-4.3. Chunk 4.4 has code that creates a very not normal population, and plots a that population's histogram. You should  
+1. find the population mean  
+2. Modify the code from 4.2 to simulate drawing samples from the population and plot their 95% CIs  
+3. Modify the code from 4.3 to simulate more samples and show the probability of drawing a sample with a CI including $\mu$  
+
+```{r 4.4 A non-normal population, fig.cap="Figure 4.4 Doesn't look Normal to Me"}
+N = 1e5
+population <- rbeta(N, .4,.4)*1e4
+hist(population)
+```
+
+OK, now see if the central limit theorem holds even for this weird population!
+
+```{r 4.5}
+
+```
+
+
+## PART 5: Perform an hypothesis test for the difference between population means
+
+One way to look at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area is to look at whether the average level of ASTHMA varies between neighborhoods that have low levels of POVERTY and those that have high levels of poverty. This is a difference-in-means problem. We commonly think about this kind of question as asking something like "is the mean level of asthma significantly different (or higher or lower) in high-poverty neighborhoods in comparison to low-poverty neighborhoods". But another way of thinking about it is asking: what is the probability that these two samples were drawn from the same population. Let's give it a go.
+
+You're going to do most of the work here.
+
+Let's formally state our research question:
+<!-- That's you, you have to write it below here -->
+
+Ok, that's done. Use chunk 5.1 to plot the prevalence of asthma across our sample of tracts.
+
+```{r 5.1}
+
+```
+
+Ooh, that looks great.
+
+Now we want to make a new variable that separates the tracts into high poverty tracts and low poverty tracts. You should end up with a dataframe that has a new variable, called 'pov_level' with two categories, 'high' and 'low'. It's up to you to decide how to make that split. Confirm that you've recoded properly by using the count function to makes sure that all rows of your clean_places data frame have a value for 'pov_level'. Do that in chunk 5.2
+
+```{r 5.2}
+
+```
+
+
+Now you have data which has both a full asthma distribution, and a grouping variable, pov_level, which implies two sub-distributions of asthma. In chunk 5.3, print out the mean levels of asthma in high and low poverty neighborhoods. Then, remake your plot of the asthma variable, but now separate it into the high and low poverty groups. Try to make this plot informative and easy to read: consider using different colors for each distribution and perhaps plotting a vertical line at the mean for each distribution. As always, first try it out yourself, then maybe try googling it, then maybe compare with a friend. If you get stuck, check out the hints.
+
+```{r 5.3}
+
+```
+
+
+That looks great. Unless you haven't finished yet, then good work so far and keep at it :).
+
+Once you are done, try interpreting the plot.
+Ask yourself: do these look like separate distributions? Do the means look significantly different? 
+5.3 Plot interpretation:
+
+
+Ok, now for the easiest part, but also the real statistics part. In chunk 5.4, use the t.test function to compare the mean prevalence of asthma in high and low poverty neighborhoods. Print the ttest results and interpret them below the chunk.
+
+```{r 5.4}
+
+```
+
+5.4 TTest interpretation:
+
+
+
+# Coda
+OK! You've finished the coding for lab 6. Just one thing left: knitting. Go ahead and press the knit button at the top of the source pane (it has a ball of yarn next to it). When I'm knitting it's common for me to get some errors, but maybe everything will go fine on the first go. If you get errors, I think they can be a little harder to interpret than regular R errors, so dont' be afraid to ask for help straightaway. 
+
+# Hints
+### 2.3
+use the assignment operator to assign the results of our code to a new dataframe:
+```
+clean_places <- PLACES_NaNDA_sample %>%
+filter the rows to only include non-NA values on ppov13_17 and asthma:
+filter(!is.na(ppov13_17), !is.na(asthma)) %>%
+select only the columns LocationID, ppov13_17 and asthma:
+select(LocationID, ppov13_17, asthma)
+```
+### 3.2
+```
+asthma_CI <- t.test(clean_places$asthma) # t.test returns conf interval of mean
+asthma_CI  # printing the confidence interval
+```
+### 4.2
+Probabilites are really just counts. How many blue lines do you have? how many lines do you have total? Divide those to get the probability.
+
+### 4.5 
+```
+This is what I did, but try not to just copy it up there. See if you can work it out line by line :)
+mu <- mean(population)
+  # one vector for our sample means, just like before  
+smean <- c()  
+  # one for the lowest point on the sample confidence interval  
+slow <- c()  
+  # one for the highest point on the sample confidence interval  
+shigh <- c()  
+for(i in 1:1e4){  
+  # this code is from 4.1   
+  cur_sample <- sample(population, n)  
+  # REPLACING MEAN WITH T.TEST  
+  s_ttest <- t.test(cur_sample)  
+  # extract the estimate of the mean  
+  smean[i] <- s_ttest$estimate  
+  # the low conf.estimate  
+  slow[i] <- s_ttest$conf.int[1]  
+  # and the high conf.estimate  
+  shigh[i] <- s_ttest$conf.int[2]  
+}  
+smean_mean <- mean(smean)  
+tibble(i = 1:i, smean, slow, shigh) %>%  
+  # make a variable that is true if \mu is in the ci  
+  mutate(included = (slow < mu) & (shigh > mu),  
+  success = cumsum(included),  
+  prob = success/i) %>%  
+  ggplot(aes(i,prob))+  
+  geom_line()+  
+  geom_hline(yintercept = 0.95)  
+```
+### 5.1
+```
+clean_places %>%  
+  ggplot(aes(asthma))+  
+  geom_density()  
+```
+### 5.2
+```
+clean_places <- clean_places %>%   
+  mutate(pov_level = if_else(ppov13_17 > median(ppov13_17), 'high', 'low'))  
+clean_places %>% count(pov_level)  
+```
+### 5.3
+
+I used `group_by` to do this. It's a function I use a ton. You can find more info here: 
+https://sparkbyexamples.com/r-programming/r-group-by-function-from-dplyr-2/
+```
+cp_means <- clean_places %>%   
+  group_by(pov_level) %>%  
+  summarise(asthma = mean(asthma))  
+
+cp_means  
+
+clean_places %>%   
+  ggplot(aes(asthma, color = pov_level))+  
+  geom_density()+  
+  geom_vline(data = cp_means, aes(xintercept = asthma, color = pov_level))+  
+  theme_minimal()  
+  
+## 5.4
+t.test(clean_places[clean_places$pov_level== 'high','asthma'],  
+       clean_places[clean_places$pov_level== 'low','asthma'])  
+```
