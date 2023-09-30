@@ -80,6 +80,35 @@ load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods
 glimpse(PLACES_NaNDA_sample) # get a list of the variables in the dataframe
 ```
 
+Let's briefly explore some of the data. We'll be working with the poverty variable later on. What do poverty levels look like in Illinois compared to New York?
+
+I can use `group_by` in combination with `summarize` to compute the average tract-level poverty in New York and Illinois, based on this sample.
+
+I can also plot the distributions of poverty in those two states based on this data. I can use the grouped data I calculated to plot lines for the means and medians in each state. I use the geom_vline and assigning it the `state_sum` object as new data. 
+
+```{r 2.2 Exploration Example, fig.cap='Figure 2.2'}
+
+state_sum <- PLACES_NaNDA_sample %>% 
+  filter(StateAbbr %in% c('NY', 'IL')) %>%
+  group_by(StateAbbr) %>%
+  summarize(poverty_mean = mean(ppov13_17),
+            poverty_median = median(ppov13_17))
+print(state_sum)
+
+PLACES_NaNDA_sample %>% 
+  filter(StateAbbr %in% c('NY', 'IL')) %>%
+  ggplot(aes(ppov13_17, color = StateAbbr))+
+  geom_density()+
+  geom_vline(data = state_sum, aes(xintercept = poverty_mean, color = StateAbbr, linetype = 'Mean'))+
+  geom_vline(data = state_sum, aes(xintercept = poverty_median, color = StateAbbr, linetype = 'Median'))+
+  theme_minimal()+
+  labs(title = 'Dist of Tract-level Pov in Illinois and New York', x = 'Poverty', y='Density')
+
+```
+
+From the table, I see that both the mean and median poverty is lower in Illinois. Interestingly, the difference seems to be higher when comparing medians. That suggests that NY might have more high-poverty tracts pulling up the mean. The plot gnerally bears that out, though notably it shows that the _highest_ poverty tract in the data, > .75, is in Illinois.
+
+
 
 In this example I am interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.  
 Do any necessary cleaning on our variables of interest  
@@ -88,7 +117,7 @@ astma = # people with asthma per 1,000 population.
 pov13_17 = Proportion people w/ income past 12 months below the federal poverty line
 
 Let's look at a summary of those data sets
-```{r 2.2}
+```{r 2.3}
 print("ppov13_17")
 summary(PLACES_NaNDA_sample$ppov13_17)
 print("asthma")
@@ -98,9 +127,9 @@ Looks like there are some cases with missing information on the key variables --
 
 So we need to take our data, then filter it to only the rows where those values are not NA. Then, for simplicity, we'll just keep a place ID and the two variables we're interested in.
 
-Use the instructions in 2.3 to write code that will make a new object called 'clean_places'. Look to the hints for... hints
+Use the instructions in 2.4 to write code that will make a new object called 'clean_places'. Look to the hints for... hints
 
-```{r 2.3}
+```{r 2.4}
 # use the assignment operator to assign the results of our code to a new dataframe 
 
 # filter the rows to only include non-NA values on ppov13_17 and asthma
@@ -364,7 +393,7 @@ Ok, now for the easiest part, but also the real statistics part. In chunk 5.4, u
 OK! You've finished the coding for lab 6. Just one thing left: knitting. Go ahead and press the knit button at the top of the source pane (it has a ball of yarn next to it). When I'm knitting it's common for me to get some errors, but maybe everything will go fine on the first go. If you get errors, I think they can be a little harder to interpret than regular R errors, so dont' be afraid to ask for help straightaway. 
 
 # Hints
-### 2.3
+### 2.4
 use the assignment operator to assign the results of our code to a new dataframe:
 ```
 clean_places <- PLACES_NaNDA_sample %>%
