@@ -1,0 +1,96 @@
+---
+title: "HW3 Key"
+output: html_document
+author: "Ian Kennedy"
+date: "2023-10-10"
+---
+
+# Part 1: Generic problems 
+
+1. A researcher is interested in studying whether people are reluctant to interact with members of certain racial and ethnic groups. She designed an experiment in which students enrolled in a lecture course were asked to choose a discussion group (all meeting at the same time in the same building) based only on the racial/ethnic stereotype  associated with the names of the teaching assistant. She observed the following registration counts: 
+
+Teaching Assistant Students enrolled
+-------            -------
+Cheng	                20
+Goldberg              45
+Jackson	              24
+Smith	                68
+Rodriguez	            15
+
+Use one-way chi-square to test the null hypothesis that the racial/ethnic name made no difference in students’ selection of a discussion group. Use a .05 confidence level and provide the following information (showing all calculations): 
+a.	the degrees of freedom 
+b.	the critical value of the test statistic 
+c.	the obtained value of the test statistic 
+d.	your decision about the null hypothesis and the meaning of this decision 
+e.	Are the sample data sufficient to reject the null hypothesis using a .01 confidence level? f. If you doubled the count of cases in each of the cells of the table, would you reach the same decision about the  hypothesis? Provide the key information used in making your decision? 
+
+2. Does voting behavior vary by social class? To find out, a political scientist questioned a random sample of 180  registered voters about which candidate, A or B, they planned to support in the upcoming election for mayor. The  researcher also questioned members of her sample concerning their perceived) social class membership – whether  upper, middle, working, or lower. Her results are as follows: 
+  
+
+| *Vote For*     | Upper	        |    Middle	      | Working	     |Lower      |  
+|---------------|---------------|-----------------|--------------|-----------|   
+| Candidate A	  |   18	        |   36            | 	16         |	12       |  
+| Candidate B	  |   14        	|   36	          |   22	       |  26       |  
+
+a.	Based on the information provided, does there appear to be an association between social class and voting  preferences in the sample of voters? Explain your answer. 
+Using chi-square, test the null hypothesis that voting behavior does not differ by social class. Use a .05 confidence  level for your test and show all calculations. Answer the following questions based on your results.
+b.	What is the critical value of your test statistic? 
+c.	What is the obtained/calculated value of the test statistic? 
+d.	What is your decision about the null hypothesis? 
+e.	What is your interpretation of the meaning of your decision? 
+f.	If you doubled the count of cases in each of the cells of the table, would you reach the same decision about the  hypothesis? Provide the key information used in making your decision?
+
+ 3. Suppose that a researcher drew a random sample of workers from a particular company and recorded the following  data to examine the effect of the number of children in their household and their annual earnings. 
+
+Worker # | Number of children	| Annual earnings ($1000's)
+|---------------|---------------|-----------------|
+|1	|4	|65|
+|2	|1	|123|
+|3 | 0 | 98 |
+|4 | 5 | 72|
+|5 | 4 | 87|
+|6 | 2 | 145|
+|7 | 3 | 112|
+|8 | 2 | 99|
+|9 | 4 | 105|
+|10 | 0 | 88|
+|11 | 2 | 167|
+|12 | 0 | 123|
+
+a.	Calculate and interpret the meaning of the correlation coefficient for the association between number of children and earnings. 
+b.	Is the association between number of children and annual earnings statistically significant? [In answering, make sure to report the null and research hypothesis along with the information used to make your decision on these  hypotheses.] 
+c.	Calculate and interpret the meaning of the regression slope, focusing on the direction and magnitude of the effect. 
+d.	Calculate and interpret the meaning of the Y-intercept. 
+e.	Predict the annual earnings of a worker with 4 children. 
+f.	What is the value of the residual (ui) for the last worker in the data (i.e., what is u12)? 
+g.	Find the coefficients of determination and non-determination and interpret what each of these statistics means.
+
+# Part 2: Generic R problems 
+1. After running through Lab 5, use a chi-squared test in R to assess the statistical significance of the association between GENDER and belief that global warming is a result of human activity. Use the "Environmental Attitudes” data available on the course website (data are called "DATA_NSEE_36368-0001-Data.rda"). Gender is in the variable called "DEMOG_GENDER." For attitudes toward global warming, use the variable "BELIEVER_CAUSE" and differentiate between two categories: 1) those who believe warming is due to human activity (original code = 1); and 2) those who either believe warming is due to natural patterns (original code =2) plus those who believe it is due to  a combination of factors (original code = 3). Make sure to also get rid of any folks who refused to answer or were not asked the question. 
+a.	Does there appear to be an association between gender and attitudes toward the causes of global warming in the sample? Explain your answer by referring to the results of the analysis. 
+b.	Is the association between gender and attitudes toward the causes of global warming statistically significant?  How do you know and what does this mean? 
+c.	Does your answer to Question b depend on the alpha level you use for the test? Why?
+
+
+2. Use bivariate correlation and regression to explore the relationship between individuals’ income and the number of children in their household (we’ll assume for now that income is our dependent variable). Use the "Race, Gender, Work, and Wages" data available on the course website (data are called "CPS_2016_2021_new.Rdata"). For a demonstration of these techniques, see the R lab on Bivariate Regression and Correlation.
+a.	Starting with the variable INCWAGE, create a variable indicating income from wages IN THOUSANDS OF DOLLARS. Make sure to first declare the numeric values for "MISSING” and “N.I.U.” cases in INCWAGE as NA before creating your new variable. Find and interpret the mean for the new variable. 
+b.	Find and interpret the mean for the variable NCHILD. Make sure to declare missing values as necessary. 
+c.	Use R to find the Pearson correlation coefficient for the association between income in thousands and NCHILD. 
+d.	Use R to perform a hypothesis test to assess whether the association between income in thousands and NCHILD is statistically significant. Report the results of your test making sure to specify: 
+1) the null hypothesis for this test
+2) the evidence used to make a decision about this hypothesis
+3) what the results of the test mean in terms of population dynamics. 
+e.	Use R to fit simple linear regression model predicting INCWAGE as a function of NCHILD. Report the results of your test making sure to interpret: 1) the meaning of the Y-intercept; 2) the meaning of the slope coefficient; and 3) the meaning of the coefficient of determination. 
+
+# Part 3: Your topic 
+1.	State your focal relationship, identifying the focal independent variable and focal dependent variable. 
+2.	Use R and the data for your topic to generate and interpret a chi-squared test to assess your focal association. For the sake of this assignment, you will need create categorical versions of your focal variables.  Provide an interpretation of the results of your test. Do the results support your theoretical hypothesis about your focal relationship? 
+3.	What do you see as the primary advantages and disadvantages of using a chi-squared to test your focal relationship?
+4.	Use R and the data for your topic to examine the Pearson correlation coefficient for the association between your variables. [If your independent variable is categorical, use a difference-in-means test or ANOVA instead of a correlation]. Interpret the results of your analysis, focusing on the strength, direction, and statistical significance of the association between your variables. 
+5.	Use R, the data provided for your topic, and bivariate regression techniques to estimate your focal dependent variable as a function of your focal independent variable. Report the results of your test making sure to interpret: 
+1)  the meaning of the Y-intercept
+2) the meaning of the slope coefficient
+3) the meaning of the coefficient of  determination. 
+6.	Do the results of your analyses for this assignment support your theoretical argument? Explain your answer. 
+7.	In comparison to techniques used earlier in the quarter, what do you see as the primary advantages and disadvantages of using correlation and regression to test your focal relationship?
+
