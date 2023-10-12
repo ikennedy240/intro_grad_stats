@@ -1,0 +1,137 @@
+---
+title: "R Lab 7 - Bivariate Tables and Chi-Sqare"
+author: Ian Kennedy
+date: "October 11, 2023"
+output:
+  html_document:
+---
+
+# Introduction
+In this lab we will:
+  1) Construct some new categorical versions of my focal variables;
+  2) Produce a nice, complete bivariate table; and 
+  3) Perform a chi-square test for the statistical significance of my focal association.
+
+For more information on the techniques and concepts illustrated in this lab, see Hands-On Programming in R at https://rstudio-education.github.io/hopr/basics.html
+
+
+For this lab I will use the data prepared for the "Neighborhoods and Health" topic. This file combines data from the PLACES data which contains information on the health characteristics of populations within census tracts (neighborhoods) and NaNDA data which brings together information on the demographic, economic, social, and ecological characteristics of these neighborhoods. The datafile for this class includes a random sample of 3,000 census tracts drawn from the population of all 74k census tracts in the US. See more about the data using the resources on the course webpage.
+
+Once you download the data to the data file in your working directory, opening the file is easy:
+
+```{r}
+load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods and Health" project
+```
+
+
+In this example I am interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.
+Do any necessary cleaning on our variables of interest
+some variables I'm interested in from the data:
+asthma = # people with asthma per 1,000 population
+pov13_17 = Proportion people w/ income past 12 months below the federal poverty line
+
+
+```{r}
+summary(PLACES_NaNDA_sample$ppov13_17)
+summary(PLACES_NaNDA_sample$asthma)
+```
+
+Looks like there are some cases with missing information on my key variables so I am going to create a clean version of the dataset that includes only those with non-missing (!is.na) on the variables included in my analysis.
+Note that here I am also just keeping the variables I am interested in analyzing, just for efficiency
+
+```{r}
+clean_PLACES <- PLACES_NaNDA_sample[!is.na(PLACES_NaNDA_sample$ppov13_17) &
+                                      !is.na(PLACES_NaNDA_sample$asthma),
+                                    c("ppov13_17", "asthma")]
+```
+
+
+****************
+PART 1) Construct some new categorical versions of my focal variables;
+
+Chi-square only works with categorical variables so I need to create categrorical versions of both focal variables
+
+Creating a new factor (categorical) variable for my IV, neighborhood poverty:
+1) low poverty = at or below 5% poverty
+2) middle poverty = above 5% but at or below 20%
+3) high poverty = above 20% poverty
+
+```{r}
+clean_PLACES$cat_poverty <- as.factor(
+  ifelse(clean_PLACES$ppov13_17<=.05, 'low poverty',
+         ifelse(clean_PLACES$ppov13_17>.05 & clean_PLACES$ppov13_17<.20, 'moderate poverty',
+                ifelse(clean_PLACES$ppov13_17>=.20, 'high poverty',
+                       clean_PLACES$ppov13_17))))
+```
+                    
+
+specifying the order of categories in this new factor
+
+```{r}
+clean_PLACES$cat_poverty <- 
+  ordered(clean_PLACES$cat_poverty,
+          levels = c("low poverty", "moderate poverty",
+                     "high poverty"))
+
+table(clean_PLACES$cat_poverty) # basic table for the new variable
+```
+
+
+
+Creating a new factor (categorical) variable for my DV, asthma cases per 1000:
+1) low asthma = at or below the mean asthma level for all tracts in the sample
+2) high asthma = above the mean asthma level for all tracts in the sample
+
+
+```{r}
+asthma_mean <- mean(clean_PLACES$asthma) # save the mean value as an object to use in calculations
+asthma_mean
+
+clean_PLACES$cat_asthma <- as.factor(
+  ifelse(clean_PLACES$asthma<=asthma_mean, 'low asthma',
+         ifelse(clean_PLACES$asthma>asthma_mean, 'high asthma',
+                       clean_PLACES$asthma)))
+
+specifying the order of categories in this new factor
+clean_PLACES$cat_asthma <- 
+  ordered(clean_PLACES$cat_asthma,
+          levels = c("low asthma", "high asthma"))
+
+table(clean_PLACES$cat_asthma) # basic table for the new variable
+```
+
+
+****************
+PART 2) Produce a bivariate table
+
+Creating a bivariate table showing the cross-classififation
+of the two new categorical variables.
+I will list my DV first in the code so it will be the row variable.
+table(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty)
+
+
+following lines use prop.table to get a table with
+proportions instead of frequencies
+The R command for doing this is call prop.table, which only 
+works by passing a table through it.
+So the following line first creates the table (called mytable)
+and then passes it through prop.table.
+The ",2" thing at the end of the code requests column proportions
+(a ",1" would give you row proportions)
+mytable <- table(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty)
+prop.table(mytable,2)
+
+
+
+****************
+PART 3) Perform a chi-square test for the statistical significance of my focal association
+
+
+Finally performing Chi-square test on my table.
+Null hypothesis is that the variables are statistically independent.
+The "correct=FALSE" part of the code just turns off the default
+Yates Continuity Correction
+chisq.test(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty, correct=FALSE)
+
+
+
