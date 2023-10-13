@@ -24,114 +24,191 @@ load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods
 ```
 
 
-In this example I am interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.
-Do any necessary cleaning on our variables of interest
-some variables I'm interested in from the data:
+In this example we are interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.
+First, check for any missing values and then do any necessary cleaning on our variables of interest.
+
+We're focused on two variables:
 asthma = # people with asthma per 1,000 population
 pov13_17 = Proportion people w/ income past 12 months below the federal poverty line
 
-
-```{r}
-summary(PLACES_NaNDA_sample$ppov13_17)
-summary(PLACES_NaNDA_sample$asthma)
-```
-
-Looks like there are some cases with missing information on my key variables so I am going to create a clean version of the dataset that includes only those with non-missing (!is.na) on the variables included in my analysis.
-Note that here I am also just keeping the variables I am interested in analyzing, just for efficiency
-
-```{r}
-clean_PLACES <- PLACES_NaNDA_sample[!is.na(PLACES_NaNDA_sample$ppov13_17) &
-                                      !is.na(PLACES_NaNDA_sample$asthma),
-                                    c("ppov13_17", "asthma")]
-```
+<!-- Make a chunck below this and use it to create a clean dataset  -->
 
 
-****************
-PART 1) Construct some new categorical versions of my focal variables;
+Once you have the clean dataset, let's walk through the steps here. Remember, a $\chi^2$ (spelled chi-squared, pronounced 'kai squared') test is a way of testing for an association between two categorical variables. Specifically, it's a way to see if the different groups in the independent variable have different proportions on the dependent variable. In our example, we will test whether neighborhoods in different poverty categories also have different rates of asthma. Like our other hypotheses tests, we're testing whether the variation we observe in the sample would be _unlikely_ under a null hypothesis of no association between groups--in our cass under the null hypothesis that the proportion of neighborhoods with high or low asthma is constant across various levels of poverty. 
 
-Chi-square only works with categorical variables so I need to create categrorical versions of both focal variables
+# PART 1) Construct some new categorical versions of my focal variables;
 
-Creating a new factor (categorical) variable for my IV, neighborhood poverty:
+Chi-square only works with categorical variables so we need to create categrorical versions of both focal variables.
+
+I'll create a new factor (categorical) variable for the IV, neighborhood poverty:
 1) low poverty = at or below 5% poverty
 2) middle poverty = above 5% but at or below 20%
 3) high poverty = above 20% poverty
 
+Then -- and this is important -- I run some code to make sure that my recode worked as expected. 
+
+**this code will only work if you _also_ named your new dataframe 'clean_places'**
+
 ```{r}
-clean_PLACES$cat_poverty <- as.factor(
-  ifelse(clean_PLACES$ppov13_17<=.05, 'low poverty',
-         ifelse(clean_PLACES$ppov13_17>.05 & clean_PLACES$ppov13_17<.20, 'moderate poverty',
-                ifelse(clean_PLACES$ppov13_17>=.20, 'high poverty',
-                       clean_PLACES$ppov13_17))))
+# recode
+clean_places <- clean_places %>% 
+  mutate(cat_pov = case_when(ppov13_17<=.05 ~'low poverty',
+                                       ppov13_17<.20 ~ 'moderate poverty',
+                                       ppov13_17>=.20 ~ 'high poverty'))
+# testing to make sure that the range is right for each cat and that I have some observations in each cat
+clean_places %>% group_by(cat_pov) %>% summarise(max_pov = max(ppov13_17), min_pov = min(ppov13_17), n = n())
 ```
                     
-
-specifying the order of categories in this new factor
+Since we know that that worked, now lets tell R that it has an order to it.
 
 ```{r}
-clean_PLACES$cat_poverty <- 
-  ordered(clean_PLACES$cat_poverty,
+clean_places <- clean_places %>% 
+  mutate(cat_pov = ordered(cat_pov,
           levels = c("low poverty", "moderate poverty",
-                     "high poverty"))
-
-table(clean_PLACES$cat_poverty) # basic table for the new variable
+                     "high poverty")))
 ```
 
 
 
-Creating a new factor (categorical) variable for my DV, asthma cases per 1000:
+Ok, based on that template from working with the poverty variable, create a new factor 
+(categorical) variable for the DV, asthma cases per 1000:
 1) low asthma = at or below the mean asthma level for all tracts in the sample
 2) high asthma = above the mean asthma level for all tracts in the sample
 
+First make the variable, check to make sure that it worked, and then give it an order. 
+
+
+# PART 2) Produce a bivariate tabl
+
+Creating a bivariate table showing the cross-classififation of the two new categorical variables.
+
+There are a couple ways of doing this. The easiest way is to use the table function. We need to put the DV--asthma--first so that it will show up as the rows of the table.
+
 
 ```{r}
-asthma_mean <- mean(clean_PLACES$asthma) # save the mean value as an object to use in calculations
-asthma_mean
-
-clean_PLACES$cat_asthma <- as.factor(
-  ifelse(clean_PLACES$asthma<=asthma_mean, 'low asthma',
-         ifelse(clean_PLACES$asthma>asthma_mean, 'high asthma',
-                       clean_PLACES$asthma)))
-
-specifying the order of categories in this new factor
-clean_PLACES$cat_asthma <- 
-  ordered(clean_PLACES$cat_asthma,
-          levels = c("low asthma", "high asthma"))
-
-table(clean_PLACES$cat_asthma) # basic table for the new variable
+# simple way using "base" r
+base_tab <- table(clean_places$cat_asthma, clean_places$cat_pov)
+base_tab
 ```
 
 
-****************
-PART 2) Produce a bivariate table
+But we can also do it in the tidyverse, though it's a little more involved. The count function will get us all of the values we need--the cell counts--but not in the normal format. The pivot_wider function pivots our table, making new columns from the column we assing to 'names_from' and giving them the values in 'values_from'. 
 
-Creating a bivariate table showing the cross-classififation
-of the two new categorical variables.
-I will list my DV first in the code so it will be the row variable.
-table(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty)
+```{r}
+# tidyverse way
+tidy_tab <- clean_places %>% count(cat_asthma,cat_pov) %>% 
+  pivot_wider(names_from = cat_pov, values_from = n)
+tidy_tab
+```
+
+These tables look... medium when knitted. We can use the knitr function 'kable' to make it look nice. This works with either kind of table.
+
+```{r}
+knitr::kable(base_tab)
+```
+
+Regardless of which table we look at, it's kind of hard to see the association just looking at the counts--it's much easier looking at the proportions.
+
+We can use the following lines to use prop.table to get a table with proportions instead of frequencies. The base R command for doing this is call prop.table, which only works by passing a table through it. 
+
+So the following line takes our 'base_tab' from above and passes it to the base R function prop.table.
+The ",2" thing at the end of the code requests column proportions, sincea ",1" would give you row proportions.
+
+```{r}
+base_prop <- prop.table(base_tab,2)
+base_prop
+```
+
+Looking at the proportions we can see that there's definitely an association in the sample.
+
+Using the tidyverse, we can have a bit more control over the format of the table. For instance, we could create a table that had the raw count first, and then the column proportion in parentheses.
+
+```{r}
+library(glue)
+clean_places %>% 
+  count(cat_asthma,cat_pov) %>% 
+  group_by(cat_asthma) %>% 
+  mutate(prop = n/sum(n), text = glue("{n} ({round(prop,2)})")) %>%
+  select(-n, -prop) %>%
+  pivot_wider(names_from = cat_pov, values_from = text)
+```
 
 
-following lines use prop.table to get a table with
-proportions instead of frequencies
-The R command for doing this is call prop.table, which only 
-works by passing a table through it.
-So the following line first creates the table (called mytable)
-and then passes it through prop.table.
-The ",2" thing at the end of the code requests column proportions
-(a ",1" would give you row proportions)
-mytable <- table(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty)
-prop.table(mytable,2)
-
-
-
-****************
-PART 3) Perform a chi-square test for the statistical significance of my focal association
-
+# PART 3) Perform a chi-square test for the statistical significance of my focal association
 
 Finally performing Chi-square test on my table.
 Null hypothesis is that the variables are statistically independent.
-The "correct=FALSE" part of the code just turns off the default
-Yates Continuity Correction
-chisq.test(clean_PLACES$cat_asthma, clean_PLACES$cat_poverty, correct=FALSE)
+The "correct=FALSE" part of the code just turns off the default Yates Continuity Correction
+
+```{r}
+chi_2 <- chisq.test(clean_places$cat_asthma, clean_places$cat_pov, correct=FALSE)
+chi_2
+```
+We can see that the $\chi^2$ statistic is 656.45, which is huge. At 2 degress of freedom, we have a very low p value. 
+
+So that means that we can reject the null hypotheses that there is no relationship between asthma and poverty in the population. Instead, we can support an alternative hypotheses that there is an association. Since these are ordinal categorical variables, we can even say that there is a positive association -- low poverty neighborhoods are more likely to also have low rates of asthma, while high poverty neighborhoods are more likely to have high rates of asthma.
+
+# Part 4) Do it yourself
+
+Ok, we started by considering asthma and neighborhood poverty. Now, please conduct a similar analysis that looks instead at rates of cancer and neighborhood poverty. Follow these steps:
+
+1) State your null and alternative hypotheses
+2) Create a clean dataset with just the variables you'll be using
+3) Create categorical versions of cancer and poverty rates. 
+4) Present a table showing the bivaririate relationship between these variables. Show both a table of counts and a table of proportions.
+5) Conduct a $\chi^2$ hypotheses test and interpret the results. 
+
+(remember that there are hints at the bottom!)
+
+## What you finished already!?!
+
+Bonus things to do:  
+- plot and explore the $\chi^2$ distribution, like we did for the normal in *Distribution Plots.R*    
+- simulate the sampling distribution for a bivariate table, or for a table with more cols and rows, like we did for the normal in lab 5 and 6   
+-- does it look like a $\chi^2$ distribution?  
+-- can you confirm the accuracy of, say, the critical value when $\alpha = 0.05$?  
 
 
+# HINTS
+
+## Intro
+maybe something like 
+```
+library(tidyverse)
+clean_places <- PLACES_NaNDA_sample %>% filter(!is.na(asthma), !is.na(ppov13_17)) %>%
+  select(LocationID, asthma, ppov13_17)
+```
+
+## Part 1
+```
+clean_places <- clean_places %>% 
+  mutate(cat_asthma = case_when(asthma <= mean(asthma) ~ 'low asthma',
+                                asthma > mean(asthma) ~ 'high asthma'),
+         cat_asthma = ordered(cat_asthma, levels = c('low asthma', 'high asthma')))
+                                                               
+clean_places %>% mutate(asthma_mean = mean(asthma)) %>%
+  group_by(cat_asthma) %>%
+  summarize(mean = first(asthma_mean), max_as = max(asthma), min_as = min(asthma), n = n())
+```
+## Part 4
+
+```
+clean_places <- PLACES_NaNDA_sample %>% filter(!is.na(cancer), !is.na(ppov13_17)) %>%
+  select(LocationID, cancer, ppov13_17)
+
+clean_places <- clean_places %>%   
+  mutate(cat_cancer = case_when(cancer <= mean(cancer) ~ 'low cancer',
+                                cancer > mean(cancer) ~ 'high cancer'),
+         cat_cancer = ordered(cat_cancer, levels = c('low cancer', 'high cancer')),
+         cat_pov = case_when(ppov13_17<=.05 ~'low poverty',
+                                       ppov13_17<.20 ~ 'moderate poverty',
+                                       ppov13_17>=.20 ~ 'high poverty'),
+         cat_pov = ordered(cat_pov,
+          levels = c("low poverty", "moderate poverty",
+                     "high poverty")))
+
+table(clean_places$cat_cancer, clean_places$cat_pov)
+prop.table(table(clean_places$cat_cancer, clean_places$cat_pov),2)
+chisq.test(clean_places$cat_cancer, clean_places$cat_pov, correct = FALSE)
+```
 
