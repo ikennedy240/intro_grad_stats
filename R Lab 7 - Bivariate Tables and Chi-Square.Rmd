@@ -78,7 +78,8 @@ Ok, based on that template from working with the poverty variable, create a new 
 First make the variable, check to make sure that it worked, and then give it an order. 
 
 
-# PART 2) Produce a bivariate tabl
+# PART 2) Produce a bivariate table
+
 
 Creating a bivariate table showing the cross-classififation of the two new categorical variables.
 
