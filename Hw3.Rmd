@@ -62,7 +62,7 @@ b.	Is the association between number of children and annual earnings statistical
 c.	Calculate and interpret the meaning of the regression slope, focusing on the direction and magnitude of the effect. 
 d.	Calculate and interpret the meaning of the Y-intercept. 
 e.	Predict the annual earnings of a worker with 4 children. 
-f.	What is the value of the residual (ui) for the last worker in the data (i.e., what is u12)? 
+f.	What is the value of the residual ($u_i$) for the last worker in the data (i.e., what is $u_12$)? What does this number mean?  
 g.	Find the coefficients of determination and non-determination and interpret what each of these statistics means.
 
 # Part 2: Generic R problems 
