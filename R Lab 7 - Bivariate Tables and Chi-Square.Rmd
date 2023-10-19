@@ -80,6 +80,7 @@ First make the variable, check to make sure that it worked, and then give it an 
 
 # PART 2) Produce a bivariate table
 
+
 Creating a bivariate table showing the cross-classififation of the two new categorical variables.
 
 There are a couple ways of doing this. The easiest way is to use the table function. We need to put the DV--asthma--first so that it will show up as the rows of the table.
