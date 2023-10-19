@@ -12,9 +12,9 @@ date: "2023-10-10"
 Teaching Assistant Students enrolled
 -------            -------
 Cheng	                20
-Goldberg              45
+Goldberg              37
 Jackson	              24
-Smith	                68
+Smith	                32
 Rodriguez	            15
 
 Use one-way chi-square to test the null hypothesis that the racial/ethnic name made no difference in students’ selection of a discussion group. Use a .05 confidence level and provide the following information (showing all calculations): 
