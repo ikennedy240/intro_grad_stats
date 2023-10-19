@@ -1,7 +1,9 @@
 ---
-title: "R Lab 9 - Bivariate Regression"
-output: html_document
-date: "2023-10-19"
+title: "R Lab 8 - Correlation plus ANOVA"
+author: Ian Kennedy
+date: "October 19, 2023"
+output:
+  html_document:
 ---
 
 # INTRODUCTION
