@@ -36,5 +36,40 @@ clean_places %>% ggplot(aes(ppov13_17, asthma))+
   geom_point()+
   geom_abline(slope = slope, intercept = intercept, size = 2, color = 'blue')
 
-plot(lm2)
+# we can also use the `ggeffects` package to make a cool predictions plot
+library(ggeffects)
+
+predictions <- ggpredict(lm2, terms = 'ppov13_17')
+predictions # check this out, predicted values across various levels fo poverty, with confidence intervals
+
+plot(predictions) # easy, but I'm not sure about the y-axis
+
+plot(predictions) + ylim(0,18)
+# plot shows that the model expects increased asthma as poverty increases. It also shows that the model is 
+# slightly more uncertain about high-poverty neighborhoods
+
+
+x <- 1:100
+y <- rnorm(100, 500, 300)
+plot(x,y)
+
+clean_places %>% sample_n(150) %>%
+  ggplot(aes(ppov13_17, asthma))+
+  geom_point()+
+  theme_classic()+
+  labs(title = 'Asthma by Poverty', x = 'Poverty Proportion', y = 'Asthma Prevalence')
+
+slope <- -3
+intercept <- 0
+
+x <- seq(-5,5, by = 0.1)
+y <- slope*x + intercept
+tibble(x,y) %>% filter(x>=-5.4, x<=5.4, y>=-5.4, y<=5.4) %>%
+ggplot(aes(x,y))+
+  geom_line()+
+  geom_hline(yintercept = 0)+
+  geom_vline(xintercept = 0)+
+  xlim(-5.41,5.41)+
+  ylim(-5.41,5.41)+
+  theme_minimal()
 
