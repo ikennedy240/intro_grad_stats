@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidycensus)
 
+# data from https://home.chicagopolice.org/statistics-data/isr-data/
 
 stops <- read_csv('~/Downloads/2022-ISR.csv')
 
