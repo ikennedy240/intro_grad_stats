@@ -1,0 +1,117 @@
+---
+title: "Lab 10 - Multiple Regression"
+output: html_document
+date: "2023-10-31"
+---
+
+# Intro
+This lab builds on your work in Lab 9 and expects that you've gone through the `tidycensus_workflow.R` script. 
+As with those, you'll need to start not by loading data, but by making sure that you have some packages installed. You'll need:
+ggeffects - a package for plotting regression effects
+tidycensus - a 'wrapper' around the US census api
+
+The difference is that this lab will ask you to run and compare various multiple regression models.
+
+Then make a new chunk below and load those packages and the tidyverse.
+
+# Part 0 Ice Cream Example
+Here's a worked example of the ice cream simulation shown in class which goes through the same steps expected below in parts 3-5. The one new thing it adds is the usage of the function `huxreg` from the package `huxtable` which is one way of easily making regression tables which have multiple models in them. 
+
+You'll need to download the data from the course website
+
+```{r}
+# load data
+ice_cream <- read_csv('data/fake_city_icecream.csv')
+```
+
+
+# make some plots. 
+```{r}
+# looks like a strong relationship
+ice_cream %>%
+  ggplot(aes(ice_cream, crime))+
+  geom_point()
+
+
+# wow, high temp means higher ice cream and higher crime
+ice_cream %>%
+  ggplot(aes(ice_cream, crime, color = temp>mean(temp)))+
+  geom_point()
+
+
+# this looks like an even stronger relationship
+ice_cream %>%
+  ggplot(aes(temp, crime))+
+  geom_point()
+```
+
+## run some regressions
+```{r}
+
+
+# bivariate
+lm1 <- lm(crime ~ ice_cream, data = ice_cream)
+lm2 <- lm(crime ~ temp, data = ice_cream)
+summary(lm1)
+summary(lm2)
+plot(ggpredict(lm1, terms = 'ice_cream'))
+plot(ggpredict(lm2, terms = 'temp'))
+```
+
+
+### Introduce Huxtable
+Huxtable is a package that let's you easily make a nice regression table comparing coefficients across models. Let's try it out.
+
+First, use the console to install huxtable. Then run the next chunk. 
+It looks great with just one model:
+```{r}
+library(huxtable)
+huxreg(lm1)
+```
+But we can pass additional models for more awesome:
+```{r}
+huxreg(lm1,lm2)
+```
+
+Now we can easily see that while the coefficients are very significant in both models 1 and 2, model 2 has a much higher R2. 
+
+
+```{r}
+# multiple regression 
+lm3 <- lm(crime ~ ice_cream + temp, data = ice_cream)
+summary(lm3)
+plot(ggpredict(lm3, terms =c('ice_cream', 'temp')))
+```
+
+
+# Now we can throw all three models into a huxtable:
+
+```{r}
+huxreg(lm1, lm2, lm3)
+```
+
+This table makes it particularly easy to see how the sign, magnitude and significance of ice_cream changes a lot from model 1 to model 3, while those things hardly change at all for temp--in fact the magnitude increases slightly. Also, note that the Adjusted R2 actually shows a slight _decrease_ from model 2 to model 3, suggesting that ice cream doesn't add anything at all to our understanding of crime if we already know about the temperature.
+
+# Part 1 Reconsidering the focal relationship
+As in lab 9, we'll consider the relationship between income and education as our focal relationship, working at the neighborhood level. Our research question remains: "Do census tracts with more people with college degrees also have higher median incomes?" In this lab, we'll pursue an elaboration strategy to either (or both!) exclude alternative explanations to show that education really causes higher incomes--ie an exclusionary elaboration strategy--or include new variables to help explain the relationship between education and income--an inclusionary exlaboration strategy. Each of these hinges on theory, however. For the purposes of this lab, you'll have three choices:
+
+1. Test the idea that education is really just a proxy for inherited wealth, which we'll operationalize using average home values
+2. Test the idea that education is mediated by race, which we'll operationalize using the proportion of white people in an area
+3. Test some other idea about the relationship between education and income at the neighborhood level using a variable that you can get from the acs. You can explore those variables using the methods in the tidycensus_workflow.R script or online here: https://data.census.gov/
+
+# Part 2 Gathering more Data
+Use the methods in tidycensus_workflow.R and from lab 9 to laod data about
+1. Proportion of people with college degrees
+2. Median Income
+3. A third variable relevant to your choice in part 1.
+
+# Part 3 Exploration
+Make three plots showing the relationships between each of your variables. Describe what you notice.
+
+
+# Part 4 Bivariate Analysis
+Fit two bivariate models, lm1, which should be a regression of income on education, and lm2, which should be a regression of income on your third variable. Interpret both models. Is the coefficient significant? What does it mean in terms of that variable and income? 
+
+
+# Part 5 Multiple Regression
+Fit a third model, lm3, which should be a multiple regression of income on education and your third variable. Interpret the results of both coefficients. Are they signfiicant? What do the partial slopes mean in terms of those variables and income. Then compare those results to the results from lm1 and lm2 (feel free to make a table of all of the results). Did your focal relationship (education and income) change with the added third variable? How did it change in terms of magnitude, sign, and significance? What does that change mean for the theory that you chose?

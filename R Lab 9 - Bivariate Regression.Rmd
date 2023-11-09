@@ -1,0 +1,17 @@
+---
+title: "R Lab 9 - Bivariate Regression"
+output: html_document
+date: "2023-10-24"
+---
+
+
+# Part 1 - Load and Prep Data
+
+Load the Places_NaNDA data and create a clean version with non-NA values on cancer `cancer`, asthma `asthma`, poverty from 2013-17 `ppov13_17`, and number of parks `count_open_parks`. Include the location id `LocationID` so that you can join your data back up later if you want.
+
+
+# Part 2 - Scatterplots
+
+We'll start by looking at the relationship between number of parks and disease. Make two scatterplots, one showing the relationship between parks and asthma and one showing the relationship between parks and cancer. Put the independent variable on the x axis.
+
+Look at your scatterplots. What do you notice? Is there a correlation? Describe the direction and magnitude of the correlation.
