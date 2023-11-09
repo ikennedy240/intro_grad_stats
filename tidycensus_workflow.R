@@ -115,3 +115,86 @@ acs_21 %>% ggplot(aes(black_prop, latinx_prop))+
 ##* (c) re-download the acs data with the rent variable, and (d) make a new scatterplot
 ##* comparting the proportion of white folks and the rent.
 
+
+##* BONUS: Look at the plot of white_prop by rent. It looks strange, right? That's 
+##* because, I'd argue, it's combining data from two somewhat distinct processes. 
+##* You already have data in your acs_21 dataframe that can explain some of that process.
+##* Can you color your points by a variable to show the two processes? Hint: you'll
+##* probably need to create a new variable with mutate to do the coloring. More hints 
+##* farther down if you want spoilers
+##* 
+##* 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##* Hint 2: The variable you need is related to the location of the census tract
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##* Hint 3: Specifically think about differences by county
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##* Hint 4: look at places w/i or outside of Cook County
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##* Hint 5: you can use this code: acs_21 %>% mutate(cook_county = str_detect(NAME, 'Cook County'))
+
