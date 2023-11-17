@@ -34,12 +34,12 @@ slope <- lm2$coefficients[['ppov13_17']]
 # plot the points and the line
 clean_places %>% ggplot(aes(ppov13_17, asthma))+
   geom_point()+
-  geom_abline(slope = slope, intercept = intercept, size = 2, color = 'blue')
+  geom_abline(slope = slope, intercept = intercept, linewidth = 2, color = 'blue')
 
 # we can also use the `ggeffects` package to make a cool predictions plot
 library(ggeffects)
 
-predictions <- ggpredict(lm2, terms = 'ppov13_17')
+predictions <- ggeffect(lm2, terms = 'ppov13_17')
 predictions # check this out, predicted values across various levels fo poverty, with confidence intervals
 
 plot(predictions) # easy, but I'm not sure about the y-axis
@@ -59,17 +59,17 @@ clean_places %>% sample_n(150) %>%
   theme_classic()+
   labs(title = 'Asthma by Poverty', x = 'Poverty Proportion', y = 'Asthma Prevalence')
 
-slope <- -3
-intercept <- 0
 
+slope <- 2
+intercept <- 4
 x <- seq(-5,5, by = 0.1)
-y <- slope*x + intercept
-tibble(x,y) %>% filter(x>=-5.4, x<=5.4, y>=-5.4, y<=5.4) %>%
-ggplot(aes(x,y))+
-  geom_line()+
+y = slope*x + intercept
+
+ggplot(tibble(x,y), aes(x,y))+
+  geom_line(color = 'red')+
+  scale_x_continuous(breaks = seq(-5,5,by = 2), lim = c(-5,5))+
+  scale_y_continuous(breaks = seq(-5,5,by = 2), lim = c(-5,5))+
   geom_hline(yintercept = 0)+
   geom_vline(xintercept = 0)+
-  xlim(-5.41,5.41)+
-  ylim(-5.41,5.41)+
   theme_minimal()
 
