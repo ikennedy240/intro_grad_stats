@@ -238,9 +238,3 @@ plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
   scale_y_log10()
 
 plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .01)
-
-
-
-
-
-
