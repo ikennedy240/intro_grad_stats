@@ -1,17 +1,73 @@
 ---
-title: "R Lab 9 - Bivariate Regression"
+title: "Lab 9 - Bivariate Regression"
 output: html_document
-date: "2023-10-24"
+date: "2023-10-31"
 ---
 
+# Intro
+This lab builds on the example in regression_example.R, but adds a twist of gathering data. You'll need to start not by loading data, but by making sure that you have some packages installed. You'll need:
+ggeffects - a package for plotting regression effects
+tidycensus - a 'wrapper' around the US census api
 
-# Part 1 - Load and Prep Data
+Go ahead and install those now!
 
-Load the Places_NaNDA data and create a clean version with non-NA values on cancer `cancer`, asthma `asthma`, poverty from 2013-17 `ppov13_17`, and number of parks `count_open_parks`. Include the location id `LocationID` so that you can join your data back up later if you want.
+Then make a new chunk below and load those packages and the tidyverse.
+
+# Part 1 Getting data from the US census
+I want to look at the relationship between income and education. For this lab, we'll address that question at the neighborhood level. So instead of using data about individuals, we'll use data about census tracts. Our research question will be: Do census tracts with more people with college degrees also have higher median incomes? 
+
+We can get data like that from the census, right in R. We can do this because the Census has something called an 'API', or an Application Programming Interface. If we send the Census API the right digital request, they'll send us the data we want. R has a tidy library called tidycensus which is a 'wrapper' around the census API. We can use the functions from tidycensus to easily request data. 
+
+The process is pretty simple. First, we decide on the variables and geograpies we want. Then, we look up the variable codes. Then we pass both the variables and the geograpies to the API. In this lab, I'll give you the codes and geographies, but in the next lab you'll look them up yourself.
+
+```{r}
+# this is a named list of variables and their codes for the api
+# you'll learn how to look up a code for a variable in Lab 10
+vars <- c('med_hh_income' = 'B19119_001',
+          'o25_bachelors_degree' = 'B27019_018',
+          'o25_total' = 'B27019_002')
+
+# this will get us data from all of the tracts in IL
+acs21_tract <- get_acs('tract', state = 'IL', variables = vars) %>% 
+  # this drops some of the variables, specifically the ACS margin of error
+  select(GEOID, variable, estimate) %>% 
+  # this changes the format of the data from 'long' to 'wide'
+  pivot_wider(names_from = variable, values_from = estimate)
+  
+```
+
+Use the glimpse function in the console to examine your data. Right now we have the _number_ of people from each tract who have a bachelor's degree (who are over 25yo), but we actually want the proportion of people with a bachelor's degree. Good thing we also have the total number of people above 25. Make a chunk below this and use it to modify the data in `acs21_tract` to create a new variable called 'prop_ba' which is the proportion of people over 25 who have a BA.
 
 
-# Part 2 - Scatterplots
+# Part 2 Exploration
+Ok, now we have nice fresh, clean census data, hot off the API. We want to explore our focal relationship. First, create a scatterplot. Then look at the correlation coefficent. Interpret both of them.
 
-We'll start by looking at the relationship between number of parks and disease. Make two scatterplots, one showing the relationship between parks and asthma and one showing the relationship between parks and cancer. Put the independent variable on the x axis.
+# Part 3 Running a Regression
+Using the `regression_example.R` file as a guide, run a regression examining the relationship between `prop_ba` and `med_hh_income`. 
 
-Look at your scatterplots. What do you notice? Is there a correlation? Describe the direction and magnitude of the correlation.
+
+# Part 4 Interpreting Regression Results
+Use the `summary` function to print the results from your regression. Interpret the regression intercept and slope. Are the results significant? What does this mean about neighborhoods with many people who have BAs? Neighborhoods where not many people have BAs?
+
+
+# Part 5 Plotting Regression Effects
+Using the `regression_example.R` file as a guide, plot the effects of your regression using the ggeffects package. 
+
+
+# Hints
+install.packages is your friend here :)
+
+Part 2
+ggplot()+
+gemo_point()
+
+Part 3
+The function to run a regression is `lm`, which stands for 'linear model'
+
+Part 4
+You need to pass your model object to the summary function. Make sure you saved your lm call in part 3 to a variable, and use summary on that variable.
+
+Part 5
+You can use the `ggpredict` or `ggeffect` functions to produce estimates of your dependent variable at various levels of your independent variable.
+
+

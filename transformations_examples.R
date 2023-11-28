@@ -348,6 +348,7 @@ huxreg(lm5)
 pred_5 <- ggpredict(lm5, terms = 'AGE')
 plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp%>% mutate(INCTOT = INCTOT+abs(min(cps_clean$INCTOT))+1), alpha = .05)+
   scale_x_log10()+
+<<<<<<< HEAD
   scale_y_log10(lim = c(-min(cps_clean$INCTOT), max(cps_samp$INCTOT)-min(cps_clean$INCTOT)+1),
                 labels = function(x) paste0('$',x-abs(min(cps_clean$INCTOT))))
 
@@ -356,3 +357,8 @@ huxreg(lm5)
 
 
 
+=======
+  scale_y_log10()
+
+plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .01)
+>>>>>>> 9484e44490039bb3015f39a811ccac28000c6cc4
