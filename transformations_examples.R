@@ -2,7 +2,7 @@ library(tidyverse)
 library(huxtable)
 library(ggeffects)
 
-
+options(scipen = 999)
 ### Simulation Example
 
 n = 1e3
@@ -77,8 +77,15 @@ lines(seq(min(x), max(x), by = .3), predict(lm3, newdata = list('x' = seq(min(x)
 ## level - level
 x <- rnorm(n)
 hist(x)
-y <- -3 + 2*x + rnorm(n,0,3)
-plot(x,y)
+y <- -3 + 2*x
+
+ggplot(data = tibble(x= seq(-5,5,by=1)), aes(x))+
+  geom_hline(yintercept = 0)+
+  geom_vline(xintercept = 0)+
+  geom_abline(intercept = 0, slope = 1)+
+  ylim(-5,5)+
+  xlim(-5,5)
+
 summary(lm(y ~ x))
 
 
@@ -175,20 +182,113 @@ plot(ggeffect(lm3, terms = 'child_cat'))+ylim(0,1e5)
 
 ## log and polynomial transformations
 
-cps_clean %>% pivot_longer(-NCHILD) %>%
+cps_clean %>% pivot_longer(c(AGE,INCTOT,log_age,log_inc)) %>%
   ggplot(aes(value, color = name, fill = name))+
   geom_density()+
   facet_wrap(~name, scales = 'free')+
   theme_minimal()
 
-cps_clean %>% sample_n(1e4) %>% ggplot(aes(AGE, INCTOT))+
-  geom_point(alpha = 0.2)+
-  theme_minimal()
+
+
+
 
 cps_clean %>% sample_n(1e4) %>% ggplot(aes(AGE, INCTOT))+
   geom_point(alpha = 0.2)+
+  theme_minimal()+
+  scale_y_continuous(labels = function(x) paste0('$',x))
+
+
+## explicitly drop people with negative income
+cps_clean_noneg <- cps_clean %>% filter(INCTOT>0)
+cps_samp <- cps_clean_noneg %>% sample_n(2e4)
+
+print(paste('We lost', nrow(cps_clean) - nrow(cps_clean_noneg), 'rows, which is', round((nrow(cps_clean) - nrow(cps_clean_noneg))/nrow(cps_clean) * 100,2), 'percent'))
+
+
+cps_samp %>% ggplot(aes(AGE, INCTOT))+
+  geom_point(alpha = 0.2)+
+  scale_x_log10()+
+  scale_y_log10(labels = function(x) paste0('$',x))+
+  theme_minimal()
+
+cps_samp %>% filter(INCTOT>=0) %>% ggplot(aes(AGE, INCTOT))+
+  geom_point(alpha = 0.2)+
   scale_x_log10()+
   scale_y_log10()+
+  theme_minimal()
+
+cps_clean_noneg %>% pivot_longer(c(AGE,INCTOT,log_age,log_inc)) %>%
+  ggplot(aes(value, color = name, fill = name))+
+  geom_density()+
+  facet_wrap(~name, scales = 'free')+
+  theme_minimal()
+
+lm1 <- lm(INCTOT ~ AGE, data = cps_clean_noneg)
+summary(lm1)
+
+
+lm2 <- lm(INCTOT ~ log(AGE), data = cps_clean_noneg)
+summary(lm2)
+
+# note that from here on, I'm applying a transformation to the income variable to keep the 
+# negative values therein
+
+lmsq <- lm(INCTOT ~ poly(AGE, 2), data = cps_clean_noneg)
+summary(lmsq)
+
+lm3 <- lm(log(INCTOT) ~ (AGE), data = cps_clean_noneg)
+summary(lm3)
+
+lm4 <- lm(log(INCTOT) ~ log(AGE), data = cps_clean_noneg)
+summary(lm4)
+
+lm5 <- lm(log(INCTOT) ~ poly(log(AGE),2), data = cps_clean_noneg)
+summary(lm5)
+
+
+huxreg(lm1,lm2,lm3, lmsq,lm4, lm5)
+
+
+
+huxreg(lm1)
+pred_1 <- ggpredict(lm1, terms = 'AGE')
+plot(pred_1)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10()
+
+huxreg(lm2)
+pred_2 <- ggpredict(lm2, terms = 'AGE')
+plot(pred_2)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10()
+
+huxreg(lm4)
+pred_4 <- ggpredict(lm4, terms = 'AGE')
+plot(pred_4)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10()
+
+huxreg(lmsq)
+pred_sq <- ggpredict(lmsq, terms = 'AGE')
+plot(pred_sq)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10()
+
+huxreg(lm5)
+pred_5 <- ggpredict(lm5, terms = 'AGE')
+plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10()
+
+
+
+
+### version using a transformation to maintain negative numbers
+cps_samp %>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1) %>% ggplot(aes(AGE, INCTOT))+
+  geom_point(alpha = 0.2)+
+  scale_x_log10()+
+  scale_y_log10(lim = c(-min(cps_samp$INCTOT), max(cps_samp$INCTOT)-min(cps_samp$INCTOT)+1),
+                labels = function(x) paste0('$',x+min(cps_samp$INCTOT)-1))+
   theme_minimal()
 
 
@@ -199,7 +299,10 @@ summary(lm1)
 lm2 <- lm(INCTOT ~ log(AGE), data = cps_clean)
 summary(lm2)
 
-lmsq <- lm(INCTOT ~ poly(AGE, 2), data = cps_clean)
+# note that from here on, I'm applying a transformation to the income variable to keep the 
+# negative values therein
+
+lmsq <- lm(INCTOT ~ poly(AGE, 2), data = cps_clean %>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1))
 summary(lmsq)
 
 lm3 <- lm(log(INCTOT) ~ (AGE), data = cps_clean %>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1))
@@ -217,29 +320,38 @@ huxreg(lm1,lm2,lm3, lmsq,lm4, lm5)
 cps_samp <- cps_clean %>% sample_n(2e4)
 
 
-pred_2 <- ggpredict(lm2, terms = 'AGE')
-plot(pred_2)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+pred_1 <- ggpredict(lm1, terms = 'AGE')
+plot(pred_1)+geom_point(aes(AGE, INCTOT), data = cps_samp%>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1), alpha = .05)+
   scale_x_log10()+
-  scale_y_log10()
+  scale_y_log10(lim = c(-min(cps_samp$INCTOT), max(cps_samp$INCTOT)-min(cps_samp$INCTOT)+1),
+                labels = function(x) paste0('$',x+min(cps_samp$INCTOT)-1))
+
+pred_2 <- ggpredict(lm2, terms = 'AGE')
+plot(pred_2)+geom_point(aes(AGE, INCTOT), data = cps_samp%>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1), alpha = .05)+
+  scale_x_log10()+
+  scale_y_log10(lim = c(-min(cps_samp$INCTOT), max(cps_samp$INCTOT)-min(cps_samp$INCTOT)+1),
+                labels = function(x) paste0('$',x+min(cps_samp$INCTOT)-1))
 
 pred_4 <- ggpredict(lm4, terms = 'AGE')
-plot(pred_4)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+plot(pred_4)+geom_point(aes(AGE, INCTOT), data = cps_samp%>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1), alpha = .05)+
   scale_x_log10()+
-  scale_y_log10()
+  scale_y_log10(lim = c(-min(cps_samp$INCTOT), max(cps_samp$INCTOT)-min(cps_samp$INCTOT)+1),
+                labels = function(x) paste0('$',x+min(cps_samp$INCTOT)-1))
 
 pred_sq <- ggpredict(lmsq, terms = 'AGE')
-plot(pred_sq)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+plot(pred_sq)+geom_point(aes(AGE, INCTOT), data = cps_samp %>% mutate(INCTOT = INCTOT+abs(min(INCTOT))+1), alpha = .05)+
   scale_x_log10()+
-  scale_y_log10()
+  scale_y_log10(lim = c(-min(cps_samp$INCTOT), max(cps_samp$INCTOT)-min(cps_samp$INCTOT)+1),
+                labels = function(x) paste0('$',x+min(cps_samp$INCTOT)-1))
 
+huxreg(lm5)
 pred_5 <- ggpredict(lm5, terms = 'AGE')
-plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .05)+
+plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp%>% mutate(INCTOT = INCTOT+abs(min(cps_clean$INCTOT))+1), alpha = .05)+
   scale_x_log10()+
-  scale_y_log10()
+  scale_y_log10(lim = c(-min(cps_clean$INCTOT), max(cps_samp$INCTOT)-min(cps_clean$INCTOT)+1),
+                labels = function(x) paste0('$',x-abs(min(cps_clean$INCTOT))))
 
-plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .01)
-
-
+huxreg(lm5)
 
 
 

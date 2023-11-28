@@ -8,7 +8,7 @@
 ##* resources which mean that the frogs end up weighing different amounts. However,
 ##* all else being equal, heavier frogs are able to lay more eggs than lighter frogs
 ##* (For this example we're only considering frogs who can lay eggs). Of course, other
-##* factors than frog weight influnece the number of eggs, so there's some noise.
+##* factors than frog weight influence the number of eggs, so there's some noise.
 ##* We can simulate the relationship between frog weight (in grams) and the number 
 ##* of eggs they lay (the average is 4,500!!).
 
@@ -20,7 +20,7 @@ library(ggeffects)
 
 # This time we'll make a data frame
 # we have 100 frogs
-n = 100
+n = 1000
 frog_df <- tibble(
   # average weight is 22.7 with sd of 3
   weight = rnorm(n,22.7,3)
@@ -45,7 +45,10 @@ summary(weight1)
 pred1 <- ggpredict(weight1, terms = 'weight')
 plot(pred1)+
   # adjusting the y-axis to start at zero and go one sd above the max observed value
-  ylim(0, max(frog_df$eggs+sd(frog_df$eggs)))
+  ylim(0, max(frog_df$eggs+sd(frog_df$eggs)))+
+  xlim(-5,40)+
+  geom_hline(yintercept = 0, color = 'red')+
+  geom_vline(xintercept = 0, color = 'red')
 
 ### PART II
 

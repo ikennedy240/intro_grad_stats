@@ -8,7 +8,7 @@ stops <- read_csv('~/Downloads/2022-ISR.csv')
 stops %>% glimpse()
 
 stops %>% select(JUVENILE_I, CREATED_DATE, AGE, SEX_CODE_CD, RACE_CODE_CD, ZIP_CD, SEARCH_PROPERTY_I) %>%
-  group_by(ZIP_CD) %>% summarise(total_stops = n(), avg_age_stoped = mean(age), 
+  group_by(ZIP_CD) %>% summarise(total_stops = n(), avg_age_stoped = mean(AGE), 
                                  white_stops = sum(RACE_CODE_CD %in% c('WHI','WHT')),
                                  black_stops = sum(RACE_CODE_CD == 'BLK'),
                                  latine_stops = sum(RACE_CODE_CD %in% c('WHI','WHT')),
