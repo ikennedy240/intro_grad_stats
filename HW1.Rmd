@@ -1,0 +1,9 @@
+---
+title: "Soc 502: HW1"
+output: pdf_document
+date: "2024-06-26"
+---
+
+
+Please answer all questions as completely as possible. There are multiple parts to this assignment. Your answers to all parts should be recorded in a single document. To report work from R, copy and paste the key portions of your session, including relevant code and output, into the same Word or pdf document containing answers to other parts of the assignment. Submit this single document via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian [ikennedy@uic.edu](ikennedy@uic.edu) or your TA early if you run into problems. 
+
