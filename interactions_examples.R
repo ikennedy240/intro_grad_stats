@@ -231,7 +231,10 @@ int_int_fx %>% as_tibble() %>% mutate(group_col = if_else(group == '0', '0','1')
 #* Does the interaction model fit worse, about as well, or better than the best previous model?
 #* How do you know?
 
-#* 3. Use the `ggeffect` function to estimate expected values, and then create a
+#* 3. Interpret the coefficients in the interaction model, including their sign, magnitude,
+#* and significance.
+
+#* 4. Use the `ggeffect` function to estimate expected values, and then create a
 #* visualization showing the model fit and the data, using the code from lines
 #* 210-220 as a guide.
 

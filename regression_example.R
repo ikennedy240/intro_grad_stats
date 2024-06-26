@@ -60,7 +60,7 @@ clean_places %>% sample_n(150) %>%
   labs(title = 'Asthma by Poverty', x = 'Poverty Proportion', y = 'Asthma Prevalence')
 
 
-slope <- 2
+slope <- -3
 intercept <- 4
 x <- seq(-5,5, by = 0.1)
 y = slope*x + intercept
