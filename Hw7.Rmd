@@ -1,0 +1,94 @@
+---
+title: "Soc 502: HW7"
+output: pdf_document
+---
+
+# Instructions
+Please answer all questions as completely as possible.  There are multiple parts to this assignment.  Your answers to all parts should be recorded in a single document. **I strongly recommend completing Assignment 7 as a knitted rmarkdown document.** You may knit to html or pdf, or even to word if you prefer, your document should contain complete answers to all questions and include necessary statistics and figures. Submit BOTH your knitted file and your rmarkdown document. To help with that, there’s an rmarkdown version of this document on blackboard. If you opt not to use an rmarkdown document, you may continue to submit a word file with code and figures pasted in. Please also submit an r script with your code. Submit via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) early if you run into problems.   
+
+# Part 1: Generic Problems  
+   
+Table 1 presents the results of an OLS regression analysis of the effects of school type (public, private, home school)
+on students’ performance on the math portion of the SAT.
+
+**Table 1. Ordinary Least Squares Regression analysis of SAT Math performance**  
+  
+```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+## DO NOT MAKE REGRESSION TABLES THIS WAY
+## THIS IS BECAUSE THIS IS A HW QUESTION
+## BUT IF FOR SOME REASON YOU NEED TO MAKE A TABLE
+## BY HAND YOU CAN USE THIS METHOD
+tabl <- "
+|                        |Model 1            |Model 2|Model 3|
+|------------------------|:-----------------:|:----------------:|:----------------:|
+|_School Type_           |
+|Public                  | *reference group* |*reference group* |*reference group* |
+|Private                 |198.0* (95.0)      | 127.5 (99.7)     | 152.7 (102.2) |
+|Home School             | 238.0** (86.5)    | 210.0* (88.2)    | 175.5* (89.4)|
+| | | | |
+|Female                  |                   |-31.4 (27.5)      | -36.6 (32.6)|
+|Family income ($1000s)  |                   | 2.5* (1.2)       | 2.7* (1.3)|
+|SAT prep course (1=yes) |                   | 64.3** (23.2)     | 63.8** (23.8) |  
+| | | | |
+|_Interactions_          | | | |
+|Female x Private        | |                                    | -50.5* (24.8)|
+|Female x Home School    | |                                    | 69.0* (33.5)|
+| | | | |
+|Constant                |462.0** (152.2)    | 488.5** (165.0) | 478.2** (166.1)|
+| | | | |
+|Model R-squared         | 0.12              | 0.25            | 0.28 |
+"
+cat(tabl) # output the table in a format good for HTML/PDF/docx conversion
+```
+   
+    
+\*p<.05; \*\*p<.01; \*\*\*p<.001  
+N of observations = 300  
+  
+  
+  
+1.1 Interpret the slope coefficients in Model 1, focusing on the direction, magnitude, and statistical significance of the effects of school type.  
+  
+1.2 Describe the basic effects of the exclusionary variables (gender, family income, and whether the student took a SAT prep course) added to Model 2.  
+  
+1.3 How does the apparent effect of school type change between Models 1 and 2? What conclusions would you draw about the focal relationship from the results in Model 2?  
+  
+1.4 Interpret the Model R-squared score in Model 1 and describe how and why it changes between Model 1 and Model 2.  
+
+1.5 According to the results in Model 3, how does the effect of school type on SAT scores vary by gender?
+  
+
+# Part 2: Generic R problems
+  
+For this part of the assignment, you will extend your earlier exploration of the relationship between individuals’ income and the number of children in their household (still assuming that income is our dependent variable).  Use the "Race, Gender, Work, and Wages" data available on the course website (data are called `CPS_2016_2021.Rdata`). For a demonstration of these techniques, see “R Lab 10 – Multiple Regression” and “R Lab 11 – Categorical Independent Variables”   
+  
+2.1	Use R to fit simple linear regression model predicting income in thousands of dollars (transform INCWAGE by declaring missing values and dividing it by 1000) as a function of NCHILD. Report the results of your test making sure to interpret: 1) the meaning of the Y-intercept; 2) the meaning of the slope coefficient; and 3) the meaning of the coefficient of determination.  
+  
+2.2	A colleague, Dr. Reviewer, claims that the observed link between income and number of children cannot be considered causal because both variables are a function of education.  According to your colleague’s argument, what role does education play in the relationship between income and number of children?  If your colleague is right, what will happen to the relationship between income and number of children when education is controlled?   
+  
+2.3	Starting with the variable EDUC, create either a new categorical variable OR a set of dummy variables to capture the following categories: 
+  - Less than HS (original codes 002 – 072) 
+  -	HS or equivalent (original code 073) 
+  -	Some college (original codes 080 – 110) 
+  -	BA or more (original codes 111 – 125) [everything else is missing] 
+Add education to your regression analysis using your new variable(s) and interpret the results.  Make sure to provide interpretations for all slopes (including their statistical significance), the Y-intercept, and the coefficient of determination.  
+  
+2.4	Are the results of your regression analyses consistent with Dr. Reviewer’s argument?  Do your results support or contradict the argument that number of children has a causal effect on income?  Explain.  
+  
+2.5	Create a visualization that shows the models’ expected changes in income as both number of births and education level change. 
+
+
+
+# Part 3: Your topic  
+  
+3.1	State your focal relationship, identifying the focal independent variable and focal dependent variable.     	
+3.2	Use R and the dataset constructed for your topic to build on your regression model from Homework 3 by adding at least one exclusionary control variable (potential source of spuriousness, redundancy, or suppression).  Explain why you think it is important to incorporate the new variable(s) and interpret the results:  
+  
+  a. how well the bivariate model fits the data  
+  b. the meaning of the model intercept  
+  c. the direction, magnitude, and statistical significance of all slope coefficients  
+  d. how the apparent effect of the focal independent variable changes with the addition of the control variable(s)  
+  e. whether the results of the regression analysis are consistent with the theoretical argument about your focal relationship 
+
+
+  

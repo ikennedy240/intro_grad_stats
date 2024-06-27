@@ -1,0 +1,49 @@
+---
+title: "Soc 502: HW4"
+output: pdf_document
+---
+
+# Instructions
+Please answer all questions as completely as possible.  There are multiple parts to this assignment.  Your answers to all parts should be recorded in a single document. **I strongly recommend completing Assignment 4 as a knitted rmarkdown document.** You may knit to html or pdf, or even to word if you prefer, your document should contain complete answers to all questions and include necessary statistics and figures. Submit BOTH your knitted file and your rmarkdown document. To help with that, there’s an rmarkdown version of this document on blackboard. If you opt not to use an rmarkdown document, you may continue to submit a word file with code and figures pasted in. Please also submit an r script with your code. Submit via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) early if you run into problems.   
+
+# Part 1: Generic Problems  
+   
+Recall that in HW3 you were provided with the following information on the number of hours spent studying per week by a sample of her undergraduate students and a sample of her graduate students.  
+  
+Undergrads	Grads
+----------  -----
+4	          14
+18          18
+11          32
+17          25
+4	          28
+8	          15
+22          18
+----------  -----  
+  
+Use these data to assess the argument that average study time for the population of graduate students is greater than the average study time for the population of undergraduates.
+1.1 Is this a one-tailed or two tailed test? How do you know?
+1.2 If you assume a .05 alpha level, what is the critical value of the test statistic?
+1.3 What is the obtained value of the test statistic?
+1.4 Based on your results, can you reject the null hypothesis?
+1.5 What does this indicate about differences in study times between the two populations? Can you be confident that there is a difference in average study times between the two populations?
+1.6 Would your decision from Question 1.4 be different if you used an alpha level of .01? Explain.
+1.7 Would your decision from Question 1.4 be different if you changed your decision about whether this is a one- or
+two-tailed test? Explain your answer.
+
+# Part 2: Generic R problems
+  
+After running through Lab 7, use a chi-squared test in R to assess the statistical significance of the association between GENDER and belief that global warming is a result of human activity. Use the "Environmental Attitudes” data available on the course website (data are called "nsee_modified.Rdata"). Gender is in the variable called "DEMOG_GENDER." For attitudes toward global warming, use the variable "BELIEVER_CAUSE" and differentiate between two categories: 1) those who believe warming is due to human activity (original code = 1); and 2) those who either believe warming is due to natural patterns (original code =2) plus those who believe it is due to  a combination of factors (original code = 3). Make sure to also get rid of any folks who refused to answer or were not asked the question.  
+
+2.1	Does there appear to be an association between gender and attitudes toward the causes of global warming in the sample? Explain your answer by referring to the results of the analysis.   
+2.2	Is the association between gender and attitudes toward the causes of global warming statistically significant?  How do you know and what does this mean?   
+2.3	Does your answer to Question b depend on the alpha level you use for the test? Why?  
+
+
+# Part 3: Your topic  
+  
+3.1	State your focal relationship, identifying the focal independent variable and focal dependent variable.   
+2.2	Use R and the data for your topic to generate and interpret a chi-squared test to assess your focal association. For the sake of this assignment, you will need create categorical versions of your focal variables.  Provide an interpretation of the results of your test. Do the results support your theoretical hypothesis about your focal relationship?   
+3.3	What do you see as the primary advantages and disadvantages of using a chi-squared to test your focal relationship? 
+
+  

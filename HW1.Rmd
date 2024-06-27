@@ -1,9 +1,164 @@
 ---
 title: "Soc 502: HW1"
 output: pdf_document
-date: "2024-06-26"
 ---
 
+# Instructions
+Please answer all questions as completely as possible. There are multiple parts to this assignment. Your answers to all parts should be recorded in a single document. To report work from R, copy and paste the key portions of your session, including relevant code and output, into the same Word or pdf document containing answers to other parts of the assignment. Submit this single document via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) or your TA early if you run into problems. 
 
-Please answer all questions as completely as possible. There are multiple parts to this assignment. Your answers to all parts should be recorded in a single document. To report work from R, copy and paste the key portions of your session, including relevant code and output, into the same Word or pdf document containing answers to other parts of the assignment. Submit this single document via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian [ikennedy@uic.edu](ikennedy@uic.edu) or your TA early if you run into problems. 
+# Part 1: Generic Problems
 
+1.1 A researcher is interested in studying whether satisfaction with graduate school increases with the amount of time students
+spend with their mentors. To conduct the study, the researcher draws a sample of first-year graduate students from across
+campus and records the number of hours they spent meeting with their faculty mentor during their first quarter of school
+and their general level of satisfaction with graduate school (very satisfied, somewhat satisfied,...very dissatisfied).
+
+a. What is the unit of analysis in this research?
+b. What is the hypothesis being tested in this research?
+c. What is the dependent variable implied by this hypothesis?
+d. What is the level of measurement for the dependent variable?
+e. What is the independent variable implied by this hypothesis?
+f. What is the level of measurement for the independent variable?
+g. Will the researcher need to use inferential statistics to reach a conclusion about her hypothesis? Why or why not?
+
+1.2 Identify the level of measurement – nominal, ordinal, or interval – represented in each of the following questionnaire items.
+For interval-level variables, also indicate whether they are continuous or discrete.
+a. What sex were you assigned at birth on your original
+birth certificate?
+1 Female
+2 Male
+
+b. Do you currently describe yourself as male, female
+or transgender?
+1 Female
+2 Male
+3 Transgender
+4 None of these
+
+c. A person’s appearance, style, or dress may affect the
+way people think of them. On average, how do you
+think people would describe your appearance, style,
+or dress? (Mark one answer)
+1 Very feminine
+2 Mostly feminine
+3 Somewhat feminine
+4 Equally feminine and masculine
+5 Somewhat masculine
+6 Mostly masculine
+7 Very masculine
+
+d. Which of the following best represents how you
+think of yourself?
+1 Gay or lesbian
+2 Straight, that is not gay or lesbian
+3 Bisexual
+4 Something else
+5 I don’t know
+
+e. Your age
+1 Younger than 20
+2 20-29
+3 30-39
+4 40-49
+5 50-59
+6 60-69
+7 70 or older
+
+e. Your age
+1 Younger than 20
+2 20-29
+3 30-39
+4 40-49
+5 50-59
+6 60-69
+7 70 or older
+f. How many years of school have you completed?
+
+g. Specify the highest level of education achieved by
+your mother.
+1 None
+2 Elementary school
+3 Some high school
+4 Graduated high school
+5 Some college
+6 Graduated college
+7 Graduate school
+h. Specify your annual income from all sources.
+
+i. In what region were you born?
+1 Northeast
+2 Midwest
+3 South
+4 West
+4 Outside of the U.S.
+
+j. What social class do your parents belong to?
+1 Upper 
+2 Upper-middle
+3 Middle-middle 
+4 Lower-middle
+5 Lower 
+6 Poor
+
+k. Indicate your political orientation by placing an “X” in the appropriate space:
+LIBERAL CONSERVATIVE
+
+1 2 3 4 5
+
+l. Do you agree that the president has failed to work effectively with congress and has made economic problems in the
+country worse?
+1 Yes
+2 No
+
+1.3 Provide a short (100 words or less) critique of any of the items described in Question 2, focusing on why the item might be
+less than optimally useful for researchers.
+
+# Part 2: Generic R problems
+2.1 Answer the following questions based on the lab and related reading.  
+
+a. What are R and R-Studio and how are they related to each other?
+b. What is an R script and why is it useful?
+c. In R, what is a function? Provide an example.
+d. What is the difference between a vector and a matrix?
+e. What R code would you use to create a vector that contains each of the numbers between 1 and 5 multiplied by 2? Make
+sure to try your code first and then report your code here.
+f. Run the following code in R
+v1 <- rep(c(1:8), times = 3)
+m1 <- matrix(v1,nrow=6,ncol=4,byrow=TRUE)
+Explain what is happening in each line of the code and describe the final product.
+g. What command would you use to call the element in the second row of the third column in the object m1 produced above?
+What value do you get when you use this code?
+h. What type of atomic vector would be appropriate for a nominal variable? An ordinal variable? An interval-level variable?
+(Hint: run `?factor()` and look at the description of the optional `ordered` argument)
+i. What is an R dataframe and how is it different from a generic matrix in R?
+j. In “Lab1 NEW” we created a dataframe called “mammal_data”. Briefly describe the information contained in this
+dataframe.
+k. If we wanted to list out the species for all the animals represented in the “mammal_data” dataframe, what command
+would we use?
+l. If we wanted to know the name, species, and weight in pounds of the mammal in the fourth row of “mammal_data”
+dataframe we created, what command could we use? What result do you get when you use this code?
+m. Create a graph in R using any of the data in the dataframe “mammal_data” (you can go simple or creative – your choice).
+Paste your results here and provide a brief description of what the graph shows.
+
+# Part 3: Your topic  
+Choose a topic from those listed under “MODULES” on the course webpage and identify a focal relationship related to this topic that
+you would like to study. Make sure to choose a dependent variable measured at the interval level (either discrete or continuous).
+The independent variable can be measured at any level. What are the focal independent and dependent variables that you are
+interested in studying?  
+  
+Hints:
+- Take a look at the “THEORY EXAMPLE” article in the folder for your topic for some ideas about theoretically-rooted focal
+relationships [in Assignment 2 you will have to describe the theoretical argument for your focal relationship anyway, so
+starting with the theory might save you some time later].  
+- Keep it simple. Your goal is to identify a focal relationship that will hold your interest, not one that will be the basis for the
+lead article in the next issue of a top scholarly journal.  
+- See me for advice if you have difficulty choosing a focal relationship or if you have an idea about an alternative topic.  
+  
+  
+3.1 Draw on the codebook or other material in the folder for your chosen topic to briefly describe the source of the data associated
+with the topic you have chosen. At a minimum, describe where the data come from, who collected them, the unit of analysis,
+and the time frame covered in the data. Basic information for the various datasets can be found in the topic folders on the
+course webpage.  
+  
+3.2 Identify at least one variable in the dataset that might be used to measure your focal independent variable and one for the
+dependent variable? Name the variables you’ve selected and indicate their levels of measurement.  

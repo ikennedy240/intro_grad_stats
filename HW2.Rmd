@@ -1,0 +1,66 @@
+---
+title: "Soc 502: HW2"
+output: pdf_document
+---
+
+# Instructions
+Please answer all questions as completely as possible. There are multiple parts to this assignment. Your answers to all parts should be recorded in a single document. To report work from R, copy and paste the key portions of your session, including relevant code and output, into the same Word or pdf document containing answers to other parts of the assignment. Submit this single document via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) or your TA early if you run into problems. 
+
+# Part 1: Generic Problems  
+  
+1.1 The following table shows the basic distribution of a variable called X which represents the number of new viral infections detected in a sample of high schools in the United States. 
+
+X          f      Cf     %      C%
+--------   ----   ----   ----   ----
+0-10 	     14 
+11-20 	   43 
+21-30 	   37 
+31-40 	   35 
+41-50 	   22 
+51-60 	   10 
+61-70 	   45 
+71-80 	   23 
+81-90 	   54 
+91-100 	   87 
+\>101      80 
+--------   ----   ----   ----   ----
+
+a.	What is the unit of analysis in these data?   
+b.	What is the total number of cases in these data?  
+c.	What is the level of measurement of X?   
+d.	Is X discrete or continuous?   
+e.	Complete the table, filling in all columns that make sense given the data structure, and making sure to add a title that you think makes sense. 
+f.	What percentage of schools had more than 100 new cases last week?   
+g.	How many schools had 30 cases or fewer last week?   
+h.	What value is at the 80th percentile on the variable X?   
+i.	A researcher develops an argument that the schools with the highest levels of new infections are in the South region of the country.  How could you investigate this using the kind of table displayed above?  Here you should describe what your analysis would look like; there is no need to do any additional analysis for this question.    
+
+# Part 2: Generic R problems
+  
+2.1	Provide the code that would be used to create a new dataframe object called “new_data” that starts with a dataframe called “old_data” but omits cases with missing information on variables called “var1” and “var2”.   
+
+2.2	Use the "dr_contestants.csv" data to create two frequency tables, one for the variable “wins” and one for the variable “bottoms.” Provide a brief interpretation of each table, referencing at least one number from each of the relevant columns in the tables.  
+
+2.3	Create a graph showing the number of wins by the contestant’s home state. To make this graph, you will have to group and summarize the data. Use the kind of graph that you think is best but make sure to omit cases with missing information on your variables of interest. Adjust the order of cases and the x-axis labels for legibility. Make sure to include a title and axis labels.  
+
+2.4	Now load the covid data from “covid_state_data_fixed.csv,” and create appropriate measures of central tendency and variability for your three variables: “earliest_case_month”, “restrictions”, and "total_cases". Provide a brief interpretation of the measures you calculate. 
+
+
+# Part 3: Your topic  
+  
+3.1	State your focal relationship, identifying the focal independent and dependent variables.  [Note: I’ll be asking you to do this on every assignment with the hope that you will continue to revise for clarity and precision with each new iteration]. 
+   
+3.2	Provide a brief description of theoretical argument and a hypothesis linking the focal variables.  
+Hints:   
+
+  - See the “THEORY EXAMPLE” articles in the project folders on the course webpage.  These articles provide theoretical arguments that might be used to justify several hypotheses related to the topics.  At very least, they provide examples of how other scholars describe their theoretical expectations. 
+  - The following questions might help you to develop a succinct description of your theoretical argument: 
+    - Does the theoretical perspective you have identified have a name?  What phrase or name have other authors used to refer to this perspective? 
+    - According to the theory, what is the direction of the effect of your focal independent variable on your focal dependent variable? 
+    - According to the theoretical perspective you have selected, what are the mechanisms through which your focal independent variable affects your focal dependent variable?  That is, how does your independent variable affect the dependent variable according to the theory? [Try to convey the logic of the theoretical connection between your focal independent variable and focal dependent variable in a way that might convince a skeptic]. 
+  - Summarize the implications of the theoretical perspective in a simple hypothesis linking your focal independent and focal dependent variables 
+    - Simplicity, testability, and specificity are important traits of a good hypothesis. 
+    - Your hypothesis should be a fairly obvious extension of the theoretical argument you provide. 
+  - REMEMBER TO KEEP IT SIMPLE.  Your goal is to build a clear, brief, and straightforward theoretical framework to guide the analyses you will perform in this and subsequent assignments.  You are not expected to give a full account of the intellectual history of the theoretical paradigm. 
+   
+3.3	Use R and the data provided for your topic to generate a frequency table or graph for one of the variables in your focal relationship.  Referring to the table or graph, provide a brief description of the distribution of the variable.  Strive to create the kind of table that would be useful in a journal article; choose the clearest methods to convey this information, collapse categories if your variable has too many values, and account for any missing values   

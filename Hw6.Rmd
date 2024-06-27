@@ -1,0 +1,79 @@
+---
+title: "Soc 502: HW6"
+output: pdf_document
+---
+
+# Instructions
+Please answer all questions as completely as possible.  There are multiple parts to this assignment.  Your answers to all parts should be recorded in a single document. **I strongly recommend completing Assignment 6 as a knitted rmarkdown document.** You may knit to html or pdf, or even to word if you prefer, your document should contain complete answers to all questions and include necessary statistics and figures. Submit BOTH your knitted file and your rmarkdown document. To help with that, there’s an rmarkdown version of this document on blackboard. If you opt not to use an rmarkdown document, you may continue to submit a word file with code and figures pasted in. Please also submit an r script with your code. Submit via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) early if you run into problems.   
+
+# Part 1: Generic Problems  
+   
+Suppose that a researcher drew a random sample of workers from a particular company and recorded the following
+data to examine the effect of the number of children in their household and their annual earnings.
+
+Worker # Number of children Annual earnings ($1000's)
+-------- ------------------ -------------------------
+1         4                 65
+2         1                 123
+3         0                 98
+4         5                 72
+5         4                 87
+6         2                 145
+7         3                 112
+8         2                 99
+9         4                 105
+10        0                 88
+11        2                 167
+12        0                 123
+-------- ------------------ -------------------------  
+  
+1.1 Calculate and interpret the meaning of the correlation coefficient for the association between number of
+children and earnings.
+1.2 Is the association between number of children and annual earnings statistically significant? (In answering, make
+sure to report the null and research hypothesis along with the information used to make your decision on these
+hypotheses.)
+1.3 Calculate and interpret the meaning of the regression slope, focusing on the direction and magnitude of the
+effect.
+1.4 Calculate and interpret the meaning of the Y-intercept.
+1.5 Predict the annual earnings of a worker with 4 children.
+1.6 What is the value of the residual ($u_i$) for the last worker in the data (i.e., what is $u_{12}$)?
+1.7 Find the coefficients of determination and non-determination and interpret what each of these statistics means.
+
+
+# Part 2: Generic R problems
+  
+2.1 Use bivariate correlation and regression to explore the relationship between individuals’ income and the number of children in their household (we’ll assume for now that income is our dependent variable). Use the "Race, Gender, Work, and Wages" data available on the course website (data are called " CPS_2016_2021.Rdata"). For a demonstration of these techniques, see R Lab 8 on Bivariate Regression and Correlation.
+  
+a.	Starting with the variable INCWAGE, create a variable indicating income from wages IN THOUSANDS OF DOLLARS. Make sure to first declare the numeric values for "MISSING” and “N.I.U.” cases in INCWAGE as NA before creating your new variable. Find and interpret the mean for the new variable.   
+b.	Find and interpret the mean for the variable NCHILD. Make sure to declare missing values as necessary.   
+c.	Plot the relationship between income and number of children. We're considering income our dependent variable, so assign your axes accordingly. Interpret the plot.  
+d.	Use R to find the Pearson correlation coefficient for the association between income in thousands and NCHILD. Interpret the correlation.  
+e.	Use R to perform a hypothesis test to assess whether the association between income in thousands and NCHILD is statistically significant. Report the results of your test making sure to specify:   
+  
+  1. the null hypothesis for this test  
+  2. the evidence used to make a decision about this hypothesis  
+  3. what the results of the test mean in terms of population dynamics     
+      
+2.2	Use R to fit simple linear regression model predicting INCWAGE as a function of NCHILD. Report the results of your test making sure to interpret: 
+  
+  a. the meaning of the Y-intercept  
+  b. the meaning of the slope coefficient  
+  c. the meaning of the coefficient of determination  
+
+
+
+# Part 3: Your topic  
+  
+3.1	State your focal relationship, identifying the focal independent variable and focal dependent variable.     	
+3.2 Use R and the data for your topic to examine the Pearson correlation coefficient for the association between your variables. [If your independent variable is categorical, use a difference-in-means test or ANOVA instead of a correlation]. Interpret the results of your analysis, focusing on the strength, direction, and statistical significance of the association between your variables.   
+3.3 Use R, the data provided for your topic, and bivariate regression techniques to estimate your focal dependent variable as a function of your focal independent variable. Report the results of your test making sure to interpret:  
+  
+  a. the meaning of the Y-intercept  
+  b. the meaning of the slope coefficient  
+  c. the meaning of the coefficient of  determination.   
+    
+3.4	Do the results of your analyses for this assignment support your theoretical argument? Explain your answer.   
+3.5	In comparison to techniques used earlier in the quarter, what do you see as the primary advantages and disadvantages of using correlation and regression to test your focal relationship?  
+
+
+  
