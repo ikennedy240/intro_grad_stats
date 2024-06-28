@@ -1,6 +1,14 @@
 # R LAB 4 - Doing it ourselves
 # SOC 502, Kennedy
 
+### LAB 4 MILESTONES ###
+# *THESE ARE THINGS YOU SHOULD BE ABLE TO DO BY THE END OF THE LAB*
+
+##* Modify existing code to serve your purposes
+##* Pull samples from a theoretical distribution
+##* Download, read, and summarize a dataset
+
+
 # ****************
 # INTRODUCTION
 # In this lab we will:
@@ -10,19 +18,23 @@
 #   3) Download, read into R, and summarize a new dataset
 
 #* So far the labs have generally been following along code that's been written
-#* But for your HW2 you'll have to start writing R code that will do the things
+#* But for your HW2 you'll have to start writing R 
+#* code that will do the things
 #* you need to answer your own questions with your own data. To scaffold your success
 #* there, this lab is a chance to start writing code in a (generally) blank script
 #* You'll have 3 tasks, each _analogous_ to stuff you've already done or stuff
-#* that I've already done for you in anothe script. Your task is to use that code
-#* written elsewhere to perform the tasks outlined below.
+#* that I've already done for you in another script. Your task is to use that code
+#* written elsewhere to perform the tasks outlined below. 
+
+#* That means that this whole lab is the Lab 4 Check Out -- there are no examples here
+#* (though there are references to two other files you'll use as examples)
 
 #* For more information on the techniques and concepts illustrated in this lab, 
 #* see Hands-On Programming in R at https://rstudio-education.github.io/hopr/basics.html
 
 
 # Task 1: Make plots of simulated normal data
-#* First, work through the 'Distribution Plots.R' file on blackboard
+#* First, work through the 'distribution_plots.R' file on blackboard
 #* That file has example code that creates a dataframe of normal data and 
 #* plots that data in a density plot. Look to the hints for help.
 
@@ -32,12 +44,14 @@
 
 # Task 2: Make plots of simulated probability data
 #* First, work through the 'probability_examples.R' file on blackboard
-#* You're going to simulate drawing socks from a sockdrawer
+#* You're going to simulate drawing socks from a sock drawer
+
 ##* 2.1 define a sample space with the following sock colors: blue,
 ##* white, black, purple, lavender, pink, and grey
 
 
 ##* 2.2 Make a sock drawer that has 4 lavender socks and 1 sock of each other color
+
 
 ##* 2.3 Define an event, L, as drawing a lavender sock. Calculate p - P(L) the probability
 ##* of drawing a lavender sock.
@@ -86,6 +100,8 @@
 #* 
 #* Task 2:
 #* Try starting with lines 33-67 from the probability_examples.R file
+#* In that file, we define the sample space with integers, but now you'll need to make a character vector
+#* Something like c('thing one', 'thing two', 'thing three')
 #* 
 #* Task 3:
 #* 3.2 use the read_csv function

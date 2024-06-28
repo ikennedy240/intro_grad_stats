@@ -1,6 +1,18 @@
 # R LAB 2 - Messy data and Freq tables and More graphical techniques
 # SOC 502, Kennedy
 
+## Read all of this green text!!!!!
+
+### LAB 2 MILESTONES ###
+# *THESE ARE THINGS YOU SHOULD BE ABLE TO DO BY THE END OF THE LAB*
+
+## Write your own code to read data
+## Select particular columns from a dataframe
+## Filter to particular rows from a dataframe
+## Mutate a dataframe to add a new variable
+## Create a frequency table based on a dataframe
+
+
 # ****************
 # INTRODUCTION
 # Now that you have a basic understanding of how R works (see Lab 1), we'll focus here on four activities:
@@ -41,7 +53,7 @@ glimpse(covid_data)
 #* Now let's focus in on the variable "restrictions" -- a variable indicating 
 #* the relative severity of covid restrictions that I made from the `Restriction details include` column
 #* States that had stay at home or shelter in place orders I marked as high
-#* States that included some buisiness or school closures I marked as medium
+#* States that included some business or school closures I marked as medium
 #* and I marked other states as low.
 
 ##* This shows that the variable is treated as a character variable even though the information is meant to be ordinal
@@ -88,7 +100,7 @@ clean_covid <- covid_data %>% # remember the arrow here assigns the dataframe to
 # ****************
 # PART 3) Create and analyze a new variable;
 
-#* Let's say we want to look at how covid restictions were related to the number 
+#* Let's say we want to look at how covid restrictions were related to the number 
 #* of covid cases recorded in states (note: the direction of causality here is ambiguous)
 
 # Notice that the values for the number of cases vary widely:
@@ -191,5 +203,19 @@ tab1(clean_covid$restrictions, cum.percent = TRUE)
 # high           41      82          100
 #   Total        50     100          100
 
-# **************** MORE LATER!!!! ****************
+### LAB 2 CHECKOUT
+
+# Complete these exercises to move on to the next lab
+# if you don't know what to do, review the content above and then ask your TA
+
+#1. Write the code to read a .csv file stored at "data/covid_state_data_fixed.csv"
+
+#2. Select any two columns from the data frame
+
+#3. Filter the data to rows from Illinois state
+
+#4. Create a new column, `pop_average` that is the average of the population from 2020-2022
+
+#5. Create a frequency table showing the number of deaths by 'earliest_case_month'
+
 

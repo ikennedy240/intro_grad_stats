@@ -1,12 +1,22 @@
 # R LAB 1 - Introductions and Getting Started in R
-# SOC 401, Crowder
+# SOC 502, Kennedy
+
+## Read all of this green text!!!!!
+
+
+### LAB 1 MILESTONES ###
+# *THESE ARE THINGS YOU SHOULD BE ABLE TO DO BY THE END OF THE LAB*
+
+## Open Rstudio
+## Run existing code
+## Recognize basic data structures
 
 
 # ****************
 # INTRODUCTION
 # The goal of this lab is to introduce you to R and R Studio, and to get you to 
 # think about some basic terminology used in R programming. As described in class,
-# we take a practical/applied approach to R in SOC 401; my goal is to get you using 
+# we take a practical/applied approach to R in SOC 502; my goal is to get you using 
 # the program as quickly as possible to do some useful statistical analyses. 
 # If you approach this with an open mind, you will pick up a lot about general 
 # operations of R programming and quickly develop some useful and highly marketable skills.
@@ -41,7 +51,7 @@
 # Instead, R is a programming language, like C++, python, or julia. 
 # You use R by writing commands in the R language and asking your computer to interpret them. 
 # In the old days, people ran R code in a UNIX terminal window-as if they were hackers 
-# in a movie from the 1980s. Now almost everyone uses R with an application called 
+# in a movie from the 1980s (https://hackertyper.com/). Now almost everyone uses R with an application called 
 # RStudio and it's what we'll use in this class as well. RStudio **is** an application 
 # like Microsoft Word-except that instead of helping you write in English, RStudio helps you write in R.
 
@@ -79,7 +89,7 @@ print("Hello World")
 #* Of course, when you do that it is your responsibility to make sure that the new code does what
 #* you expect. Our intention is that these labs serve as a cookbook for your homework, for your
 #* final project, and for basic data analysis and statistics in the future, especially paired with what
-#* you learn in 402.  
+#* you learn in 503.  
 
 
 # ****************
@@ -90,7 +100,7 @@ print("Hello World")
 # are working from something aptly called the "working directory." Preferably you 
 # want the folder location of the script you're working on and the working directory 
 # to be one and the same. This is because life is easier if anything you reference in an R script 
-# (i.e. a dataset you want to import, another r script with functions you wrote, etc.) 
+# (i.e. a data set you want to import, another r script with functions you wrote, etc.) 
 # is in the same folder as said referencing R script in order to properly execute whatever 
 # commands you tell R to carry out. Therefore, it is wise to be very clear and organized 
 # in the way you set up your folders and files to prevent future headaches. 
@@ -99,8 +109,8 @@ print("Hello World")
 # You can read more about this at https://rstudio-education.github.io/hopr/dataio.html#working-directory.
 
 #* To make things easier for this class, we've already set up something called an
-#* 'R project' file, called '401Labs.Rproj'. As long as you open your work using
-#* That R project file, it will automattically set your working directory.
+#* 'R project' file, called 'intro_grad_stats.Rproj'. As long as you open your work using
+#* That R project file, it will automatically set your working directory.
 #* But sometimes you'll need to do that manually. Here's how:
 
 ##* use the command below to see your current working directory
@@ -118,7 +128,7 @@ setwd("/some/file/path")
 #* in order to find out what you need to improve. 
 
 #* Here's the key thing: errors are normal, and common. They don't mean that anything is broken, 
-#* and they certianly aren't a judgement about you, your code, or your ability. Both coding
+#* and they certainly aren't a judgement about you, your code, or your ability. Both coding
 #* and statistics are hard, and complicated, and especially difficult when you're starting out.
 #* Errors aren't something that only happen to new coders--I get errors all the time. The trick is 
 #* to trust that as you gain experience, you'll understand more and more about what errors mean
@@ -434,6 +444,16 @@ mammal_data %>%               # take the data
   geom_col()                  # specify a 'geom', in this case `geom_col` since we want a bar plot
 
 
+### Lab 1 Checkout ###
+
+# These questions are based on the content above
+# if you don't know the answer, go back up and check
+
+# 1. What is a 'working directory'?
+# 2. What is a vector in R?
+# 3. Copy the code above that reads a data file into memory
+# 4. When you run the code you copied for 3, what kind of data structure does it produce?
 
 
-# **************** MORE LATER!!!! ****************
+
+
