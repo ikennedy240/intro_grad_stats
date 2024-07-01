@@ -1,6 +1,16 @@
 # R LAB 5 - The standard normal and sampling distributions
 # SOC 502, Kennedy
 
+### LAB 5 MILESTONES ###
+# *THESE ARE THINGS YOU SHOULD BE ABLE TO DO BY THE END OF THE LAB*
+
+##* Plot a normal distribution given its moments
+##* Calculate and plot a given area under a normal distribution
+##* Calculate the probability of observing a particular value, given a distribution
+##* Draw samples and plot them as part of the whole distribution
+##* Use repeated sampling to draw a plot of the sampling distribution
+
+
 # ****************
 # INTRODUCTION
 # In this lab we will:
@@ -12,8 +22,8 @@
 
 #* As we're moving towards doing statistical inference, we want to gain facility
 #* moving between our data -- which is normally a sample -- and other related distributions.
-#* The distribution of our sample is the sample distribution
-#* One of these is the standard normal distribution - with mean 0 and sd 1
+#* The distribution of our sample is the sample distribution.
+#* One related distribution is the standard normal distribution - with mean 0 and sd 1.
 #* Another is the sampling distribution - which is imaginary
 #* And finally, the population distribution, which is (usually) unobserved
 
@@ -24,9 +34,9 @@
 mu <- 0
 sigma <- 1
 
-#* 1.2 then we'll pull some data from that distribution
-#* this code uses the `seq` function which makes a sequencde of numbers
-#* staring at start, going to end, and having lengthe length.out
+#* 1.2 then we'll prepare the x values which we'll use to pull from the normal distribution
+#* this code uses the `seq` function which makes a sequence of numbers
+#* staring at start, going to end, and having length length.out
 #* Instead of length, you can specify 'by' to set a step size
 #* For us, we want to start 5 sd below the mean and go to 5sd above
 #* And we want a lot of observations to make a smooth curve, so we've asked for
@@ -59,43 +69,68 @@ plot_df %>% ggplot(aes(value, pdf))+
 ## Part 2: Plotting Critical Values
 #* we'll start by considering a question from class: What proportion of men
 #* fall between Ian's dad and Ian's brother in height
+#* We'll start by just plotting those below Ian's brother
+#* and then build on that to plot the area between them
 
 # 2.1 define the distribution
 
-# mean
+# mean - this should be the population mean for men's heights
 mu <- 70
-# sd
+# sd - this should be the population standard deviation
 sigma <- 3
 
 
-# 2.2 Define our critical values and find their lower-tail probabilites
-dad <- 67
-brother <- 69
-pdad <- pnorm(dad, mu, sigma)
-pbro <- pnorm(brother, mu, sigma)
+# 2.2 Define our critical values and find their lower-tail probabilities
+dad <- 67 # Ian's dad's height
+brother <- 69 # Ian's brother's height
+pdad <- pnorm(dad, mu, sigma) # this is the probability of being at or below Dad's height
+pbro <- pnorm(brother, mu, sigma) # and at or below brother's height
 # subtract to find the area under the curve between them
 between <- pbro-pdad
+# we can already output a clean answer to the question (using glue!):
+# note using functions inside the {} is AOK!
+print(glue("The proportion of men between Ian's dad and Ian's brother's height is {round(between, 2)}"))
 
-# 2.3 Make a plot
+# 2.3 Plot just the area under Ian's brother's height
 plot_df <- tibble(
   # calculating for values from 5 sd below the mean to 5 sd above, with 1000 values
+  # same as in part 1 above, but using our population mean and sd
   value = seq(mu - 5*sigma, mu + 5*sigma, length.out = 1e4)
-) %>% mutate(pdf = dnorm(value, mu, sigma), alpha = if_else((value <= brother) & (value>=dad), .7,0),fill = if_else((value <= brother) & (value>=dad), 'lavender','blue'))
+) %>% mutate(pdf = dnorm(value, mu, sigma), # this is just getting the  probability density function for each value
+             fill = if_else((value <= brother), "Shorter than Ian's brother","Taller than Ian's brother")) # using text here will make the legend automatically
 
+# now that we've prepared our data, we plot
 plot_df %>% ggplot(aes(value, pdf))+
   # this plots the pdf
   geom_line()+
-  # this puts a line at our critical values
+  # this puts a line at each of our critical values
+  geom_segment(x = brother, y = 0, xend = brother, yend = dnorm(brother, mu, sigma))+
+  geom_ribbon(aes(ymax=pdf, fill = fill),ymin=0, alpha = .7)+
+  theme_classic()
+
+# 2.4 Make a plot showing the area between the heights
+plot_df <- tibble(
+  # calculating for values from 5 sd below the mean to 5 sd above, with 1000 values
+  # same as in part 1 above, but using our population mean and sd
+  value = seq(mu - 5*sigma, mu + 5*sigma, length.out = 1e4)
+) %>% mutate(pdf = dnorm(value, mu, sigma), # this is just getting the  probability density function for each value
+             fill = if_else((value <= brother) & (value>=dad), 'Between Heights','Outside the Heights')) 
+
+# now that we've prepared our data, we plot
+plot_df %>% ggplot(aes(value, pdf))+
+  # this plots the pdf
+  geom_line()+
+  # this puts a line at each of our critical values
   geom_segment(x = dad, y = 0, xend = dad, yend = dnorm(dad, mu, sigma))+
   geom_segment(x = brother, y = 0, xend = brother, yend = dnorm(brother, mu, sigma))+
-  # change value>x to value<x if you want the area below the critical value!
-  geom_ribbon(aes(ymax=pdf, fill = fill, alpha = alpha),ymin=0)+
-  scale_alpha_identity()+
-  scale_fill_identity()+
+  # this fills the area based on the tibble
+  geom_ribbon(aes(ymax=pdf, fill = fill), ymin=0, alpha = .5)+
+  # and this specifies the colors
+  scale_fill_manual(values = c('Between Heights' = 'lavender', 'Outside the Heights' ='white'))+
   theme_classic()
 
 
-# 2.4 Make another plot
+# 2.5 Make another plot
 # Calculate and plot the middle 50% of the US women's height distribution, which 
 # has a mean of 64.5 and a sd of 2.5
 
@@ -162,17 +197,13 @@ acs_df %>% filter(!is.na(rent)) %>%
   count(rent>=2000) %>% mutate(prop = n/sum(n))
 
 # 3.10 the actual data show that 9.5% of neighborhoods actually have a median 
-# rent higher than $2k. Look at the plot and explain this discrepency
+# rent higher than $2k. Look at the plot and explain this discrepancy
 
 ##* 3.11 Based on the normal distribution, calculate the probability of observing an neighborhood with
 ##* a median rent of $3k or more. Then calculate the observed proportion of neighborhoods
 ##* with such a high rent. Explain the difference.
 
-##* 3.12 Based on the normal distribution, calculate the probability of observing an neighborhood with
-##* a median rent of $0 or less. Then calculate the observed proportion of neighborhoods
-##* with such a high rent. Explain the difference.
-
-##* 3.13 What do these experiments suggest about the utility of the normal distribution 
+##* 3.12 What do these experiments suggest about the utility of the normal distribution 
 ##* for approximating real-life distributions that are skewed? What could you do 
 ##* to improve this comparison? Try plotting the log of the rent distribution.
 
@@ -220,8 +251,6 @@ acs_df  %>%
 ##* 4.2 Run the code for 4.1 a few times and notice how the samples change
 ##* the values we get for the sample mean 
 
-##* 4.3 Rewrite this code to do the same thing but with the income distribution
-##* rather than with the rent distribution
 
 ## Part 5: Plot the sampling distribution and the population distribution
 
@@ -349,23 +378,39 @@ tibble(smeans = smean_vector) %>%
 #* you cna remake this sampling distribution with 1 million samples
 
 
-
 # 5.6 modify the code above to take 1000 samples. What do you notice about the histogram?
 
 # 5.7 modify the code above to take 500 samples of 50 tracts, instead of 10. What do you notice?
 
-# 5.8 Rewrite 5.5 to work with the income data
+
 
 #* BONUS It takes a few seconds to run 1000 samples. 
 #* Write some code that can take 1e6 (1 million) samples in less than a minute
 #* There's an answer in the hint that can do it, can you go faster than that?
 #* You can use this format to time execution:
 start.time <- Sys.time()
-## ...Relevent code... ##
+## ...Relevant code... ##
 end.time <- Sys.time()
 time.taken <- end.time - start.time
 time.taken
 
+
+## LAB 5 CHECK-OUT
+
+# 1 Write code below to plot a normal distribution with mean = 8 and sd = 2
+# You can plot either a density plot or a histogram
+
+# 2 Calculate and plot the middle 95% of an imaginary nonbinary height distribution, which 
+# has a mean of 66.5 and a sd of 4.5
+
+# 3 Based on the normal distribution and the data from part 3 above, calculate the probability of observing an neighborhood with
+# a median rent of $0 or less. Then calculate the observed proportion of neighborhoods
+# with such a high rent. Explain the difference.
+
+# 4 Rewrite the code from 4.1 to draw and plot samples from the income distribution
+# rather than with the rent distribution
+
+# 5 Rewrite the code from 5.5 to work with the income data
 
 
 ##### HINTS
