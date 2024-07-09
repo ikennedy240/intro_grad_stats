@@ -1,10 +1,16 @@
 ---
 title: "R Lab 6 - Confidence Intervals and Hypothesis Tests"
 author: Ian Kennedy
-date: "September 29, 2023"
+date: "July 9, 2024"
 output:
   html_document:
 ---
+
+# Lab 6 Milestones
+- Knit an R markdown document
+- Estimate a population mean
+- Calculate a confidence interval around our estimate
+- Perform a t-test to compare two means
 
 # Introduction
 In this lab we will:  
@@ -18,7 +24,7 @@ For more information on the techniques and concepts illustrated in this lab, see
 
 ## PART 1: R Markdown Files
 
-So far we've been using files ending in '.R', which are usually called R scripts. Starting today, with Lab 6, we'll use files ending in '.Rmd' which are called R markdown files. Markdown is 'markup language' which lets you write files in plain text (the way you're probably viewing this file in the source pane in R studio), but use those plain text files to produce beautifully formatted HTML and pdf reports Rmarkdown is a markdown format that allows you to embed R code into a markdown file so that you can use the code, visualizations, output, and other results in your reports. The process of converting your code-embedded plain-text file to an HTML file is called 'knitting', and we'll cover it at the end of this lab. Read more about markdown [here](https://rmarkdown.rstudio.com/lesson-1.html), or more about Rmarkdown [here](https://www.markdownguide.org/). That link format might look weird in R studio, but once you 'Knit' this document together, you'll see that the word 'here' in square brackets gets turned into a link to the appropriate url in parentheses.
+So far we've been using files ending in '.R', which are usually called R scripts. Starting today, with Lab 6, we'll use files ending in '.Rmd' which are called R markdown files. Markdown is 'markup language' which lets you write files in plain text (the way you're probably viewing this file in the source pane in R studio), but use those plain text files to produce beautifully formatted HTML and pdf reports. Rmarkdown is a markdown format that allows you to embed R code into a markdown file so that you can use the code, visualizations, output, and other results in your reports. The process of converting your code-embedded plain-text file to an HTML file is called 'knitting', and we'll cover it at the end of this lab. Read more about Rmarkdown [here](https://rmarkdown.rstudio.com/lesson-1.html), or more about markdown [here](https://www.markdownguide.org/). That link format might look weird in R studio, but once you 'Knit' this document together, you'll see that the word 'here' in square brackets gets turned into a link to the appropriate url in parentheses.
 
 ### Chunks
 
@@ -80,7 +86,7 @@ load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods
 glimpse(PLACES_NaNDA_sample) # get a list of the variables in the dataframe
 ```
 
-Let's briefly explore some of the data. We'll be working with the poverty variable later on. What do poverty levels look like in Illinois compared to New York?
+Let's briefly explore some of the data. We'll be working with the poverty variable later on, so we can start with a simple reserch question: What do poverty levels look like in Illinois compared to New York?
 
 I can use `group_by` in combination with `summarize` to compute the average tract-level poverty in New York and Illinois, based on this sample.
 
@@ -106,7 +112,7 @@ PLACES_NaNDA_sample %>%
 
 ```
 
-From the table, I see that both the mean and median poverty is lower in Illinois. Interestingly, the difference seems to be higher when comparing medians. That suggests that NY might have more high-poverty tracts pulling up the mean. The plot gnerally bears that out, though notably it shows that the _highest_ poverty tract in the data, > .75, is in Illinois.
+From the table, I see that both the mean and median poverty is lower in Illinois. Interestingly, the difference seems to be higher when comparing medians. That suggests that NY might have more high-poverty tracts pulling up the mean. The plot generally bears that out, though notably it shows that the _highest_ poverty tract in the data, > .75, is in Illinois.
 
 
 
@@ -123,7 +129,7 @@ summary(PLACES_NaNDA_sample$ppov13_17)
 print("asthma")
 summary(PLACES_NaNDA_sample$asthma)
 ```
-Looks like there are some cases with missing information on the key variables -- note the "NA's" row in the summary for ppov13_17 -- so we need to to create a clean version of the dataset that includes only those with non-missing (!is.na) on the variables included in our analysis.
+Looks like there are some cases with missing information on the key variables -- note the "NA's" row in the summary for ppov13_17 -- so we need to do something about that -- we won't be able to include them in our analysis. Remember, there are lots of ways to deal with those missing data points. The simplest way is to exclude them, but that is not usually the best way. For now, we'll create a clean version of the dataset that includes only those with non-missing (!is.na) on the variables included in our analysis. Also, remember that you only need to worry about this if your data _has_ missing values at all.
 
 So we need to take our data, then filter it to only the rows where those values are not NA. Then, for simplicity, we'll just keep a place ID and the two variables we're interested in.
 
@@ -210,7 +216,9 @@ tibble(i = 1:i, smean, slow, shigh) %>%
   theme_classic()
 
 ```
+
 Figure 4.1 includes `r i` samples from the sampling distribution for tract median rents.
+
 Note a cool trick above, by putting r i inside 'ticks', the knit document will include the value for the variable i at this point in the document.
 
 We can use similar format to have in-line calculations so that we don't have to edit the numbers in the text each time we remake the code. For example, I can report the population mean (which won't change, but has too many decimal places) and the sampling distribution mean (which will):
@@ -389,8 +397,25 @@ Ok, now for the easiest part, but also the real statistics part. In chunk 5.4, u
 
 
 
-# Coda
+
+
+
+# Lab 6 checkout 
+This lab includes some hard stuff. Don't worry, the checkout questions only check what you _need_ to continue to the next lab. You don't need to be able to do the whole simulation thing from part 4 from scratch!
+
+1. Estimate a population mean
+Estimate the population mean for household income, `hh_inc` in the `acs_df` data. Describe, in a sentence or two, the population of interest.
+
+2. Calculate a confidence interval around our estimate
+Use the `ttest` function to calculate a 95% confidence interval around the mean for `hh_inc`.
+
+3. Perform a t-test to compare two means
+Pick two states. Optionally plot the distribution of household incomes in those states. Compare the household income in those two states using a difference of means test and report your results.
+
+4. Knit an Rmarkdown document  
 OK! You've finished the coding for lab 6. Just one thing left: knitting. Go ahead and press the knit button at the top of the source pane (it has a ball of yarn next to it). When I'm knitting it's common for me to get some errors, but maybe everything will go fine on the first go. If you get errors, I think they can be a little harder to interpret than regular R errors, so dont' be afraid to ask for help straightaway. 
+
+
 
 # Hints
 ### 2.4
