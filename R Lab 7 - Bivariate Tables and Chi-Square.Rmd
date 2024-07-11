@@ -1,11 +1,17 @@
 ---
 title: "R Lab 7 - Bivariate Tables and Chi-Sqare"
 author: Ian Kennedy
-date: "October 11, 2023"
+date: "July 11, 2024"
 output:
   html_document:
 ---
 
+# Lab 7 Goals:   
+- Make a categorical variable with some specification  
+- Test that specification (confirm our code worked as expected)  
+- Make a nice-looking bivariate table  
+- Compute and interpret a chi-square test   
+  
 # Introduction
 In this lab we will:
   1) Construct some new categorical versions of my focal variables;
@@ -14,7 +20,8 @@ In this lab we will:
 
 For more information on the techniques and concepts illustrated in this lab, see Hands-On Programming in R at https://rstudio-education.github.io/hopr/basics.html
 
-
+## 0.1 Loading Data  
+  
 For this lab I will use the data prepared for the "Neighborhoods and Health" topic. This file combines data from the PLACES data which contains information on the health characteristics of populations within census tracts (neighborhoods) and NaNDA data which brings together information on the demographic, economic, social, and ecological characteristics of these neighborhoods. The datafile for this class includes a random sample of 3,000 census tracts drawn from the population of all 74k census tracts in the US. See more about the data using the resources on the course webpage.
 
 Once you download the data to the data file in your working directory, opening the file is easy:
@@ -23,22 +30,27 @@ Once you download the data to the data file in your working directory, opening t
 load("data/PLACES_NaNDA_sample.Rdata") # loading the data for the "Neighborhoods and Health" project
 ```
 
+  
+## 0.2 Checking for missing data and cleaning
+  
+In this example we are interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.  
 
-In this example we are interested in looking at the association between the level of POVERTY in the neighborhood and the prevalence of ASTHMA in the area.
 First, check for any missing values and then do any necessary cleaning on our variables of interest.
 
 We're focused on two variables:
 asthma = # people with asthma per 1,000 population
 pov13_17 = Proportion people w/ income past 12 months below the federal poverty line
 
-<!-- Make a chunck below this and use it to create a clean dataset  -->
+<!-- Make a chunk below this and use it to create a clean dataset called `clean_places` -->
 
 
-Once you have the clean dataset, let's walk through the steps here. Remember, a $\chi^2$ (spelled chi-squared, pronounced 'kai squared') test is a way of testing for an association between two categorical variables. Specifically, it's a way to see if the different groups in the independent variable have different proportions on the dependent variable. In our example, we will test whether neighborhoods in different poverty categories also have different rates of asthma. Like our other hypotheses tests, we're testing whether the variation we observe in the sample would be _unlikely_ under a null hypothesis of no association between groups--in our cass under the null hypothesis that the proportion of neighborhoods with high or low asthma is constant across various levels of poverty. 
+Once you have the clean dataset, let's walk through the steps here. Remember, a $\chi^2$ (spelled chi-squared, pronounced 'kai squared') test is a way of testing for an association between two categorical variables. Specifically, it's a way to see if the different groups in the independent variable have different proportions on the dependent variable. In our example, we will test whether neighborhoods in different poverty categories also have different rates of asthma. Like our other hypotheses tests, we're testing whether the variation we observe in the sample would be _unlikely_ under a null hypothesis of no association between groups--in our case under the null hypothesis that the proportion of neighborhoods with high or low asthma is constant across various levels of poverty. 
 
 # PART 1) Construct some new categorical versions of my focal variables;
-
-Chi-square only works with categorical variables so we need to create categrorical versions of both focal variables.
+  
+## 1.1 Categorical Recoding  
+  
+Chi-square only works with categorical variables so we need to create categorical versions of both focal variables.
 
 I'll create a new factor (categorical) variable for the IV, neighborhood poverty:
 1) low poverty = at or below 5% poverty
@@ -59,6 +71,10 @@ clean_places <- clean_places %>%
 clean_places %>% group_by(cat_pov) %>% summarise(max_pov = max(ppov13_17), min_pov = min(ppov13_17), n = n())
 ```
                     
+What am I checking for here? I want to be sure that my "high poverty" category actually has the high poverty tracts and that it doesn't overlap with the other categories. This checks out. The chart shows that low poverty tracts run from 0% poverty to almost 5%, moderate from 5% to almost 20% and high from 20% to 100%, just like I coded it.
+  
+## 1.2 Making an Ordinal Var from a Categorical Var
+  
 Since we know that that worked, now lets tell R that it has an order to it.
 
 ```{r}
@@ -69,20 +85,24 @@ clean_places <- clean_places %>%
 ```
 
 
-
+  
+## 1.3 Practice
+  
 Ok, based on that template from working with the poverty variable, create a new factor 
 (categorical) variable for the DV, asthma cases per 1000:
+
 1) low asthma = at or below the mean asthma level for all tracts in the sample
 2) high asthma = above the mean asthma level for all tracts in the sample
 
-First make the variable, check to make sure that it worked, and then give it an order. 
+First make the variable, check to make sure that it worked, and then give it an order. These are the same steps that we took with the poverty var above, so you can use that as a framework.
 
 
 # PART 2) Produce a bivariate table
 
 
-Creating a bivariate table showing the cross-classififation of the two new categorical variables.
+Creating a bivariate table showing the cross-classification of the two new categorical variables.
 
+## 2.1 A simple table
 There are a couple ways of doing this. The easiest way is to use the table function. We need to put the DV--asthma--first so that it will show up as the rows of the table.
 
 
@@ -92,7 +112,7 @@ base_tab <- table(clean_places$cat_asthma, clean_places$cat_pov)
 base_tab
 ```
 
-
+## 2.2 Tidyverse table
 But we can also do it in the tidyverse, though it's a little more involved. The count function will get us all of the values we need--the cell counts--but not in the normal format. The pivot_wider function pivots our table, making new columns from the column we assing to 'names_from' and giving them the values in 'values_from'. 
 
 ```{r}
@@ -102,62 +122,80 @@ tidy_tab <- clean_places %>% count(cat_asthma,cat_pov) %>%
 tidy_tab
 ```
 
+## 2.3 Nicely knitted table
 These tables look... medium when knitted. We can use the knitr function 'kable' to make it look nice. This works with either kind of table.
 
 ```{r}
 knitr::kable(base_tab)
 ```
 
+  
+## 2.4 Table proportions  
+  
 Regardless of which table we look at, it's kind of hard to see the association just looking at the counts--it's much easier looking at the proportions.
 
 We can use the following lines to use prop.table to get a table with proportions instead of frequencies. The base R command for doing this is call prop.table, which only works by passing a table through it. 
 
 So the following line takes our 'base_tab' from above and passes it to the base R function prop.table.
-The ",2" thing at the end of the code requests column proportions, sincea ",1" would give you row proportions.
+The ",2" thing at the end of the code requests column proportions, since ",1" would give you row proportions.
 
 ```{r}
 base_prop <- prop.table(base_tab,2)
 base_prop
 ```
 
-Looking at the proportions we can see that there's definitely an association in the sample.
+Looking at the proportions we can see that there's definitely an association in the sample--rates are similar in moderate poverty neighborhoods, by wayy differnt in low and high poverty neighborhoods.
 
-Using the tidyverse, we can have a bit more control over the format of the table. For instance, we could create a table that had the raw count first, and then the column proportion in parentheses.
+## 2.5 Table proportions in the tidyverse nicely knitted
+Using the tidyverse, we can have a bit more control over the format of the table. For instance, we could create a table that had the raw count first, and then the column proportion in parentheses. And we can pipe that to `kable` to make it look nice knitted
 
 ```{r}
 library(glue)
 clean_places %>% 
+  # this does the actual counting
   count(cat_asthma,cat_pov) %>% 
+  # These next two lines calculate the proportions
   group_by(cat_asthma) %>% 
-  mutate(prop = n/sum(n), text = glue("{n} ({round(prop,2)})")) %>%
+  mutate(prop = n/sum(n), 
+         # this uses a glue function to format our text, putting n, the count first
+         # and then a rounded version of the proportion next
+         text = glue("{n} ({round(prop,2)})")) %>%
+  # we use select to remove two variables that we don't want in our table
   select(-n, -prop) %>%
-  pivot_wider(names_from = cat_pov, values_from = text)
+  # then we change the layout of the table by pivoting it
+  pivot_wider(names_from = cat_pov, values_from = text) %>% 
+  # finally, we can pipe it to a kable to make it look nice knitted
+  knitr::kable()
 ```
 
 
 # PART 3) Perform a chi-square test for the statistical significance of my focal association
 
+## 3.1 Running the Chi-Square
 Finally performing Chi-square test on my table.
-Null hypothesis is that the variables are statistically independent.
-The "correct=FALSE" part of the code just turns off the default Yates Continuity Correction
+The null hypothesis is that the variables are statistically independent.
+The "correct=FALSE" part of the code just turns off the default Yates Continuity Correction  
 
 ```{r}
 chi_2 <- chisq.test(clean_places$cat_asthma, clean_places$cat_pov, correct=FALSE)
 chi_2
-```
-We can see that the $\chi^2$ statistic is 656.45, which is huge. At 2 degress of freedom, we have a very low p value. 
+```  
+  
+## 3.2 Chi-Square Interpretation  
+  
+We can see that the $\chi^2$ statistic is 656.45, which is huge. At 2 degrees of freedom, we have a very low p value. 
 
-So that means that we can reject the null hypotheses that there is no relationship between asthma and poverty in the population. Instead, we can support an alternative hypotheses that there is an association. Since these are ordinal categorical variables, we can even say that there is a positive association -- low poverty neighborhoods are more likely to also have low rates of asthma, while high poverty neighborhoods are more likely to have high rates of asthma.
+So that means that we can reject the null hypotheses that there is no relationship between asthma and poverty in the population. Instead, our analysis supports the alternative hypotheses that there is an association. Since these are ordinal categorical variables, we can even say that there is a positive association -- low poverty neighborhoods are more likely to also have low rates of asthma, while high poverty neighborhoods are more likely to have high rates of asthma.
 
-# Part 4) Do it yourself
+# Lab 7 Checkout
 
-Ok, we started by considering asthma and neighborhood poverty. Now, please conduct a similar analysis that looks instead at rates of cancer and neighborhood poverty. Follow these steps:
+Ok, we started by considering asthma and neighborhood poverty. Now, please conduct a similar analysis that looks instead at rates of *cancer* and neighborhood poverty. Follow these steps:
 
 1) State your null and alternative hypotheses
 2) Create a clean dataset with just the variables you'll be using
-3) Create categorical versions of cancer and poverty rates. 
-4) Present a table showing the bivaririate relationship between these variables. Show both a table of counts and a table of proportions.
-5) Conduct a $\chi^2$ hypotheses test and interpret the results. 
+3) Create categorical versions of cancer and poverty rates (you already have poverty!). Include code that let's you confirm that your variables are as you expected. 
+4) Present a table showing the bivaririate relationship between these variables. Show both a table of counts and a table of proportions (or a table that shows both as in 2.5 above)
+5) Conduct a $\chi^2$ hypotheses test *and interpret the results*. 
 
 (remember that there are hints at the bottom!)
 
