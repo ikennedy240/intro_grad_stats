@@ -1,25 +1,35 @@
 ---
 title: "R Lab 8 - Correlation plus ANOVA"
 author: Ian Kennedy
-date: "October 19, 2023"
+date: "July 11, 2024"
 output:
   html_document:
 ---
 
+# Lab 8 Goals
+- Prep data for correlation and ANOVA analysis
+- Create exploratory visualizations
+- Conduct and interpret Correlation Analysis
+- Conduct ant interpret ANOVA
+
 # INTRODUCTION
 In this lab we will:
-  0) Simulate data to use to demonstrate correlation and ANOVA
-  1) Use correlation to look at the association between two interval-level variables;
-  2) Use ANOVA and regression to look at the effect of a categorical independent variable on an interval-level dependent variable.
+  1) Simulate data to use to demonstrate correlation and ANOVA
+  2) Create exploratory visualiztions of correlations
+  3) Use correlation to look at the association between two interval-level variables;
+  4) Use ANOVA to look at the effect of a categorical independent variable on an interval-level dependent variable.
 
-For more information on the techniques and concepts illustrated in this lab, see Hands-On Programming in R at https://rstudio-education.github.io/hopr/basics.html
 
-# Part 0) A simulation-based example
+# Part 1: Create the simulation
 
-We're going to use simulated data to worth through an analysis of plant growth. First we'll visualize associations, then we'll look at correlations, and finally we'll do ANOVA.
+We're going to use simulated data to work through an analysis of plant growth. First we'll visualize associations, then we'll look at correlations, and finally we'll do ANOVA.
+
+## 1.1 Experiment Description
 
 Imagine we're testing a pesticide to see how it influences plant growth. We run an experiment and vary 1. how much light each plant gets, 2. whether there is a pesticide administered, and 3. other random factors. This simulation imagines an experiment of 100 rows of 4 plants, each row is given a different amount of light, and within each row, each of the four plants is given a different amount of pesticide. The plants are grown in a greenhouse environment where pests themselves are not an issue.
-
+  
+## 1.2 simulating data
+  
 I can create fake data of the relationship between those variables, which we might call simulated data:
 
 ```{r create simulated data}
@@ -34,10 +44,14 @@ df <- tibble(light = rep(runif(100, .5, 1), each = 4), # observed light amounts 
 summary(df$growth)
 ```
 
-<!-- Check out how I can put the specific numbers from my simulation into my knitted code: -->
+<!-- Check out how I can put the specific numbers from my simulation into my knitted code: -->  
 In my simulation, plants grew from a min value of `r min(df$growth)` to a max value of `r max(df$growth)` with an average of `r mean(df$growth)`.
-
-Now that we have the data, let's visualize the relationship between our focal outcome -- growth -- and our two independent variables, light and pesticide.
+  
+# Part 2: Exploratory Visualization
+  
+## 2.1 Scatterplot
+  
+Now that we have the data, let's visualize the relationship between our focal outcome -- growth -- and our two independent variables, light and pesticide. These are called exploratory visualizations becuase they give us the chance to observe--visually not analytically--possible quantitative associations. 
 
 Light is a continuous variable, so we'll use a scatterplot.
 
@@ -49,7 +63,9 @@ df %>% ggplot(aes(light, growth))+
 ```
 This plot is basic, but it does the job. I can see some kind of correlation there, I think.
 
-
+  
+## 2.2 Boxplot
+  
 Pesticide technically is also an interval variable, but it only takes 4 values in my data: 0,2,6,12 so it might be more interesting to make a boxplot. I'll have to adjust the water variable from numeric to factor to get it to work.
 
 ```{r}
@@ -64,7 +80,12 @@ df %>%
 ```
 
 It looks like there's an association here too. Plants with more pesticide grew less, which makes sense.  
-
+  
+# Part 3: Correlation on simulated data
+  
+  
+## 3.1 Light and Growth Correlation
+  
 Now we'll try some correlation. We can use the `cor.test` function to both calculate th correlation and to do a hypothesis test for its significance.
 
 ```{r light growth correlation}
@@ -74,18 +95,29 @@ lg_test
 
 Here we see a positive, significant correlation of $\rho = $ `r `r lg_test[['estimate']][['cor']]`. The magnitude suggests a moderate correlation, and the fact that it's positive suggests plants which had a lot of light also tended to grow more. That it's significant means that we can (or could if it were real) expect that these results would be similar in the population of plants.
 
+  
+## 3.2 Pesticide and Growth Correlation
+  
 Let's try with pesticide.
-
+  
 ```{r}
 pg_test <- cor.test(df$pesticide,df$growth)
 pg_test
 ```
+  
+  
+  
 Here we see a negative, significant correlation of $\rho = $ `r `r pg_test[['estimate']][['cor']]`. The magnitude suggests a moderate to weak correlation, and the fact that it's negative suggests that when pesticide increases, plant growth tends to decrease. That it's significant means that we can (or could if it were real) expect that these results would be similar in the population of plants.
-
-In the case of the pesticide plants, we also might wonder whether there was a significant difference between plants that had different amounts of pesticide. We could run an ANOVA to see if the difference between groups of plants that got different amounts of pesticides was larger that the difference within those groups.
+  
+# Part 4: ANOVA on simulated data
+  
+In the case of the pesticide plants, we also might wonder whether there was a significant difference between plants that had different amounts of pesticide. We could run an ANOVA to see if the difference between groups of plants that got different amounts of pesticides was larger that the difference within those groups. This is another example of exploratory visualization.
 
 We'll focus here on the three groups of plants that got pesticides -- ignoring the plants with 0 pesticides.
-
+  
+  
+## 4.1 Exploratory Visualization Again
+  
 Let's start with a plot of the distributions of the groups.
 
 ```{r}
@@ -99,7 +131,13 @@ df_somepest %>% ggplot(aes(growth, color = cat_pesticide, group = cat_pesticide)
   geom_vline(aes(xintercept = growth_mean,color = cat_pesticide), linetype = 2)
 
 ```
-We can see that while we have clearly different means -- so variation between groups, we also see that each distribution is quite spread out, so a fair amount of variation within groups too. We can use `oneway.test` to see whether the differences are significant.
+We can see that while we have clearly different means -- so variation between groups, we also see that each distribution is quite spread out, so a fair amount of variation within groups too.
+
+  
+## 4.2 ANOVA Analysis and Interpretation
+  
+
+We can use `oneway.test` to run an ANOVA test to see whether the differences are significant.
 
 ```{r}
 # we use a 'formula' here to tell r to do an anova of growth 'by' pesticide
@@ -109,19 +147,21 @@ anova1
 In our simulation, these differences are significant with an observed test statistic of `r anova1$statistic[['F']]` - so many times more variation between groups than within groups. Our p-value is `r anova1$p.value`, so very small and significant at $\alpha = 0.001$.
 
 
-# Part 1) Prep your data
+# LAB 8 Checkout 
+
+## 1) Prep your data
 
 For this lab I will use the data prepared for the "Neighborhoods and Health" topic. This file combines data from the PLACES data which contains information on the health characteristics of populations within census tracts (neighborhoods) and NaNDA data which brings together information on the demographic, economic, social, and ecological characteristics of these neighborhoods. The datafile for this class includes a random sample of 3,000 census tracts drawn from the population of all 74k census tracts in the US. See more about the data using the resources on the course webpage.
 
 Load that data and create a new cleaned dataframe that has four variables: a tract id, the poverty proportion as measured in the 2013-17 ACS, the prevalence of asthma in the tract, and the number of open parks in the tract.
 
-# PART 2) Visualize the data
-Create two visualiztions. One that shows the relationship between poverty and asthma and one that shows the relationship between the number of parks in a tract and asthma.
+## 2) Visualize the data
+Create two visualizations. One that shows the relationship between poverty and asthma and one that shows the relationship between the number of parks in a tract and asthma.
 
-# Part 3) Correlation Analysis
+## 3) Correlation Analysis
 Examine and interpret the correlation for asthma and poverty and for asthma and parks.
 
-# Part 4) ANOVA
+## 4) ANOVA
 Conduct and interpret an analysis seeing if there's a significant difference in asthma prevalence across tracts that 1) have no parks, 2) have 1 park or 3) have 2 or more parks. You'll need to recode parks into a categorical variable to do this, and then run an ANOVA test. 
 
 # BONUS
