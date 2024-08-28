@@ -141,17 +141,14 @@ m. Create a graph in R using any of the data in the dataframe “mammal_data” 
 Paste your results here and provide a brief description of what the graph shows.
 
 # Part 3: Your topic  
-Choose a topic from those listed under “MODULES” on the course webpage and identify a focal relationship related to this topic that
+Choose a topic of sociological (or social scientific) interest from your own interests or from those listed under “Final Project Data” on the "Final Project" part of the course webpage and identify a focal relationship related to this topic that
 you would like to study. Make sure to choose a dependent variable measured at the interval level (either discrete or continuous).
 The independent variable can be measured at any level. What are the focal independent and dependent variables that you are
 interested in studying?  
   
 Hints:
-- Take a look at the “THEORY EXAMPLE” article in the folder for your topic for some ideas about theoretically-rooted focal
-relationships [in Assignment 2 you will have to describe the theoretical argument for your focal relationship anyway, so
-starting with the theory might save you some time later].  
-- Keep it simple. Your goal is to identify a focal relationship that will hold your interest, not one that will be the basis for the
-lead article in the next issue of a top scholarly journal.  
+- Take a look at the “THEORY EXAMPLE” article in the folder for your topic for some ideas about theoretically-rooted focal relationships [in Assignment 2 you will have to describe the theoretical argument for your focal relationship anyway, so starting with the theory might save you some time later].  
+- Keep it simple. Your goal is to identify a focal relationship that will hold your interest, not one that will be the basis for the lead article in the next issue of a top scholarly journal.  
 - See me for advice if you have difficulty choosing a focal relationship or if you have an idea about an alternative topic.  
   
   
