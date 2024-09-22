@@ -110,7 +110,7 @@ country worse?
 1 Yes
 2 No
 
-1.3 Provide a short (100 words or less) critique of any of the items described in Question 2, focusing on why the item might be
+1.3 Provide a short (100 words or less) critique of any of the items described in Question 1.2, focusing on why the item might be
 less than optimally useful for researchers.
 
 # Part 2: Generic R problems
@@ -141,7 +141,7 @@ m. Create a graph in R using any of the data in the dataframe “mammal_data” 
 Paste your results here and provide a brief description of what the graph shows.
 
 # Part 3: Your topic  
-Choose a topic from those listed under “MODULES” on the course webpage and identify a focal relationship related to this topic that
+3.1 Choose a topic from those listed under “MODULES” on the course webpage and identify a focal relationship related to this topic that
 you would like to study. Make sure to choose a dependent variable measured at the interval level (either discrete or continuous).
 The independent variable can be measured at any level. What are the focal independent and dependent variables that you are
 interested in studying?  
@@ -155,10 +155,10 @@ lead article in the next issue of a top scholarly journal.
 - See me for advice if you have difficulty choosing a focal relationship or if you have an idea about an alternative topic.  
   
   
-3.1 Draw on the codebook or other material in the folder for your chosen topic to briefly describe the source of the data associated
+3.2 Draw on the codebook or other material in the folder for your chosen topic to briefly describe the source of the data associated
 with the topic you have chosen. At a minimum, describe where the data come from, who collected them, the unit of analysis,
 and the time frame covered in the data. Basic information for the various datasets can be found in the topic folders on the
 course webpage.  
   
-3.2 Identify at least one variable in the dataset that might be used to measure your focal independent variable and one for the
+3.3 Identify at least one variable in the dataset that might be used to measure your focal independent variable and one for the
 dependent variable? Name the variables you’ve selected and indicate their levels of measurement.  
