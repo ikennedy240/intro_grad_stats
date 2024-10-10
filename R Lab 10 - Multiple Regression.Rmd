@@ -1,8 +1,16 @@
 ---
 title: "Lab 10 - Multiple Regression"
 output: html_document
-date: "2023-10-31"
+date: "2024-10-09"
 ---
+
+# Lab 10 Goals
+
+- Think critically about regression relationships
+- Gather data from the census
+- Make exploratory visualizations
+- Fit and compare bivariate models
+- Fit multivariable models and interpret them
 
 # Intro
 This lab builds on your work in Lab 9 and expects that you've gone through the `tidycensus_workflow.R` script. 
@@ -13,18 +21,22 @@ tidycensus - a 'wrapper' around the US census api
 The difference is that this lab will ask you to run and compare various multiple regression models.
 
 Then make a new chunk below and load those packages and the tidyverse.
-
+  
 # Part 0 Ice Cream Example
 Here's a worked example of the ice cream simulation shown in class which goes through the same steps expected below in parts 3-5. The one new thing it adds is the usage of the function `huxreg` from the package `huxtable` which is one way of easily making regression tables which have multiple models in them. 
-
+  
 You'll need to download the data from the course website
-
+   
 ```{r}
+# load libraries
+library(tidyverse)
+library(ggeffects)
+
 # load data
 ice_cream <- read_csv('data/fake_city_icecream.csv')
 ```
 
-
+  
 # make some plots. 
 ```{r}
 # looks like a strong relationship
@@ -43,9 +55,9 @@ ice_cream %>%
 ice_cream %>%
   ggplot(aes(temp, crime))+
   geom_point()
-```
-
-## run some regressions
+```  
+  
+## run some regressions  
 ```{r}
 
 
@@ -57,24 +69,32 @@ summary(lm2)
 plot(ggpredict(lm1, terms = 'ice_cream'))
 plot(ggpredict(lm2, terms = 'temp'))
 ```
-
+   
 
 ### Introduce Huxtable
 Huxtable is a package that let's you easily make a nice regression table comparing coefficients across models. Let's try it out.
-
+  
 First, use the console to install huxtable. Then run the next chunk. 
 It looks great with just one model:
 ```{r}
 library(huxtable)
 huxreg(lm1)
 ```
-But we can pass additional models for more awesome:
+But we can pass additional models for more awesome:  
 ```{r}
 huxreg(lm1,lm2)
 ```
+  
+Note that huxtable isn't the only way to make nice regression tables in R. Stargazer, which we used earlier, can also make good regression tables with multiple models. Its default output, however, is Latex, so you have to make sure to specify that you want text (or html if you're knitting to html) output:
+  
+```{r}
+library(stargazer)
+stargazer(lm1,lm2,type ='text')
+```
 
+  
 Now we can easily see that while the coefficients are very significant in both models 1 and 2, model 2 has a much higher R2. 
-
+  
 
 ```{r}
 # multiple regression 
@@ -83,35 +103,48 @@ summary(lm3)
 plot(ggpredict(lm3, terms =c('ice_cream', 'temp')))
 ```
 
-
-# Now we can throw all three models into a huxtable:
-
+  
+# Now we can throw all three models into a huxtable:  
+Note that I've also added some stuff to the huxreg call to spice it up.
+  
 ```{r}
-huxreg(lm1, lm2, lm3)
+# a named list of models let's me add titles to the model columns
+huxreg(list('Model 1' = lm1,  'Model 2' = lm2, 'Model 3' = lm3), 
+       # A named character vector of coefficients lets me clean up the names
+       coefs = c('Intercept' = '(Intercept)', 'Ice Cream' = 'ice_cream', 'Temp' = 'temp'),
+       # adjusting the statistics argument to include adjusted r squared 
+       # // set to NULL to see all options
+       statistics = c(N = "nobs", R2 = "r.squared", "Adjusted R2" = 'adj.r.squared', "logLik", "AIC"))
 ```
-
-This table makes it particularly easy to see how the sign, magnitude and significance of ice_cream changes a lot from model 1 to model 3, while those things hardly change at all for temp--in fact the magnitude increases slightly. Also, note that the Adjusted R2 actually shows a slight _decrease_ from model 2 to model 3, suggesting that ice cream doesn't add anything at all to our understanding of crime if we already know about the temperature.
-
-# Part 1 Reconsidering the focal relationship
-As in lab 9, we'll consider the relationship between income and education as our focal relationship, working at the neighborhood level. Our research question remains: "Do census tracts with more people with college degrees also have higher median incomes?" In this lab, we'll pursue an elaboration strategy to either (or both!) exclude alternative explanations to show that education really causes higher incomes--ie an exclusionary elaboration strategy--or include new variables to help explain the relationship between education and income--an inclusionary exlaboration strategy. Each of these hinges on theory, however. For the purposes of this lab, you'll have three choices:
-
+  
+This table makes it particularly easy to see how the sign, magnitude and significance of ice_cream changes a lot from model 1 to model 3, while those things hardly change at all for temp--in fact the magnitude increases slightly. Also, note that thought R2 increases from model 2 to model 3, the Adjusted R2 actually shows a slight _decrease_ from model 2 to model 3, suggesting that ice cream doesn't add anything at all to our understanding of crime if we already know about the temperature.
+  
+# Lab 10 Checkout
+  
+## 1) Reconsidering the focal relationship
+As in lab 9, we'll consider the relationship between income and education as our focal relationship, working at the neighborhood level. Our research question remains: "Do census tracts with more people with college degrees also have higher median incomes?" In this lab, we'll pursue an elaboration strategy to either (or both!) exclude alternative explanations to show that education really causes higher incomes--ie an exclusionary elaboration strategy--or include new variables to help explain the relationship between education and income--an inclusionary elaboration strategy. Each of these hinges on theory, however. For the purposes of this lab, you'll have three choices:
+  
 1. Test the idea that education is really just a proxy for inherited wealth, which we'll operationalize using average home values
 2. Test the idea that education is mediated by race, which we'll operationalize using the proportion of white people in an area
 3. Test some other idea about the relationship between education and income at the neighborhood level using a variable that you can get from the acs. You can explore those variables using the methods in the tidycensus_workflow.R script or online here: https://data.census.gov/
-
-# Part 2 Gathering more Data
+  
+## 2) Gathering more Data
 Use the methods in tidycensus_workflow.R and from lab 9 to laod data about
 1. Proportion of people with college degrees
 2. Median Income
 3. A third variable relevant to your choice in part 1.
-
-# Part 3 Exploration
+  
+## 3) Exploration
 Make three plots showing the relationships between each of your variables. Describe what you notice.
+  
 
-
-# Part 4 Bivariate Analysis
+## 4) Bivariate Analysis
 Fit two bivariate models, lm1, which should be a regression of income on education, and lm2, which should be a regression of income on your third variable. Interpret both models. Is the coefficient significant? What does it mean in terms of that variable and income? 
+  
 
-
-# Part 5 Multiple Regression
+## 5) Multiple Regression
 Fit a third model, lm3, which should be a multiple regression of income on education and your third variable. Interpret the results of both coefficients. Are they significant? What do the partial slopes mean in terms of those variables and income. Then compare those results to the results from lm1 and lm2 (feel free to make a table of all of the results). Did your focal relationship (education and income) change with the added third variable? How did it change in terms of magnitude, sign, and significance? What does that change mean for the theory that you chose?
+  
+
+
+
