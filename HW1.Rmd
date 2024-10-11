@@ -157,5 +157,6 @@ with the topic you have chosen. At a minimum, describe where the data come from,
 and the time frame covered in the data. Basic information for the various datasets can be found in the topic folders on the
 course webpage.  
   
+  
 3.2 Identify at least one variable in the dataset that might be used to measure your focal independent variable and one for the
 dependent variable? Name the variables you’ve selected and indicate their levels of measurement.  
