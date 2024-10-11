@@ -1,11 +1,18 @@
 ---
 title: "Lab 9 - Bivariate Regression"
 output: html_document
-date: "2023-10-31"
+date: "2024-09-22"
 ---
 
+# Lab 9 Goals
+- Conduct basic exploratory analysis
+- Run a bivariate regression
+- Interpret a bivariate regression
+- Plot regression results
+
+
 # Intro
-This lab builds on the example in regression_example.R, but adds a twist of gathering data. You'll need to start not by loading data, but by making sure that you have some packages installed. You'll need:
+This lab starts with an example we've worked a lot on in class: Poverty and Asthma. Then asks you to gathering new data using the Census API. You'll need to start not by loading data, but by making sure that you have some packages installed. You'll need:
 ggeffects - a package for plotting regression effects
 tidycensus - a 'wrapper' around the US census api
 
@@ -13,12 +20,174 @@ Go ahead and install those now!
 
 Then make a new chunk below and load those packages and the tidyverse.
 
-# Part 1 Getting data from the US census
-I want to look at the relationship between income and education. For this lab, we'll address that question at the neighborhood level. So instead of using data about individuals, we'll use data about census tracts. Our research question will be: Do census tracts with more people with college degrees also have higher median incomes? 
+Then another new chunk where you load the `PLACES_NaNDA_sample.Rdata` data.
+
+# Part 1: Exploratory analysis: Asthma and Poverty
+
+We practiced exploratory analysis in lab 8. First we'll clean up the Places NaNDA data by removing NAs on the asthma (`asthma`), population density (`popden13_17`), and poverty (`ppov13_17`) variables.  
+
+Then we'll make a few exploratory plots
+
+```{r cleaning_data}
+clean_places <- PLACES_NaNDA_sample %>% filter(!is.na(asthma),!is.na(popden13_17), !is.na(ppov13_17)) %>%
+  select(LocationID, asthma, popden13_17,ppov13_17)
+```
+
+
+```{r asthma by pop density}
+clean_places %>% ggplot(aes(popden13_17, asthma))+
+  geom_point()
+```
+
+
+```{r asthma by poverty}
+clean_places %>% ggplot(aes(ppov13_17, asthma))+
+  geom_point()
+```
+
+## 1.1 Briefly interpret the two plots.
+
+## 1.2 Calculate, report, and interpret the sample correlation for the two relationships. Does that align with your plot interpretation?
+
+## 1.3 Make another exploratory plot of the relationship that you think is more interesting using the plot type of your choice.
+
+
+# Part 2: Fitting a Regression Model
+Now that we know the basic shape of our relationship, we can try fitting some regressions.
+  
+We'll start with Asthma by Pop Density. We'll call our model lm1, which stands for linear model 1. That way we can easily fit additional models and keep track of what we've done. 
+
+The summary function will automatically summarize the results of our model fit.
+
+```{r first regresion}
+lm1 <- lm(asthma ~ popden13_17, data = clean_places)
+summary(lm1)
+```
+
+There's a lot of information here, let's take it line by line.
+
+Up top is the 'Call'. It tells us what code we used to run this model. That's helpful if you forget what `lm1` was all about.
+
+Next we have the residuals. A model that's working well should have residuals normally distributed around zero. If they're not, we might have heterskedasticity problems. This line gives us an idea about whether that is true by showing us the summary of the residuals. Perfectly normal residuals should have a median around zero, and 1Q+3Q = 0--the first quartile should be the same magnitude as the third quartile but negative. We're pretty close here if not perfect.
+
+Now to the good part. The coefficients. Here we have a regression table. The rows represent each of the terms in our regression: the intercept and one coefficient per independent variable. Here we are running a bivariate regression, so we only have the intercept and one other variable: population density. The columns tell us about different parts of the coefficient. 
+
+The `Estimate` column tells us... the model's estimate for the coefficient. *In the special case of the intercept, this reflects the expected value of the outcome when all of the predictor variables are 0.* It is called the intercept becuase it is the (y) intercept of the regression line. The estimate is on the scale of our outcome variable, in this case percent of people with Asthma. So the `Estimate` of 9.9 for the `(Intercept)` means that the model expects a place with a population density of 0 (impossible, I know) to have an asthma rate of 9.9%. For each covariate, *the estimate represents the expected change in the outcome (y) with a one unit change in the independent variable (x)*. The estimate is the estimate of the slope of the regression line. There are two key aspects of the covariate estimate to interpret: the sign and the magnitude. Here the sign is positive, so it reflects the model's expectation that asthma tends to be higher when population density is high. The magnitude, though, is very small: 3.1x10-6, so 0.0000031. This is on the scale of the outcome, so it reflects an expectation that a one unit increase in population density is associated with a 0.0000031 percentage point (! not percent!) increase in Asthma. Even though it's small, remember that the range for population density is very large: from 0 to over 150k (or 1.5e5), so even with a really small effect size, the huge range could make it impactful. But not in this case: the model expects a neighborhood with population density of 150k to only have an asthma rate .465 percentage points higher than a neighborhood with a population density of 1. How do I know? becuase I multiplied 1.5e5*3.1e-6. 
+
+Ok, the next column is the `Std. Error`, or the standard error. That tells us how uncertain the model is about its estimate. This is also on the scale of the outcome variable, and it's the size of the standard deviation of the sampling distribution of the coefficient. We can use the standard error to estimate how likely it is that we could observe this coefficient when the true coefficient value was zero. All that takes is a t-test. As a simple heuristic, if the standard error is more than half the magnitude of the estimate, then there is a greater than 5% chance that we could have observed this coefficient even if the true value was zero. So in that case we couldn't reject the null hypotheses, so in that case the coefficient estimate would not be significant. How about in this example? Our coefficient estimate is 3.1e-6 and our standard error is 2.3e-6. So nearly as big, definately more than half as big. So, spoiler alert, this coefficient is not signficant.
+
+Sometimes it's really close to half as much, though, and we have to do the actual t-test. In that case we need a t-value and we need to compare it to our critical t value (which depends on our alpha level, but is 1.96 if alpha=0.05). So t-value is the next column. Since the standard error reflects the standard deviation of the sampling distribution for the coefficient, the t-value is just how many standard errors it takes to make the magnitude of the coefficient estimate. Or it's the coefficient estimate divited by the standard error. 3.1e-6/2.3e-6 = 1.376, so that's our t-value. Again, since it's less than 1.96, it's not significant.
+
+The last column is the P value. It has the same interpretation as the p-value has always had: the probability of observing a result of this magnitude under the null hypothesis given the data. In the regression case, it's the probability of observing a coefficient that doesn't equal zero under the null hypothesis that the coefficient equals zero, given the data. Interpreting the p value is also the same: if it's lower than the alpha value then we can say that the result (for that coefficient) is statistically significant and we can reject the null. If it's not lower, than we fail to reject the null and say the coefficient is not statistically significant.
+
+The results (sometimes) end with some number of asterisks. They're a shorthand for significance: one star means the result is significant at alpha = 0.05, two starts for 0.01 and three stars for 0.001. A '.' means the p-value is lower than 0.1, but that's not a significant statement in most cases. (the `Signif. Codes` line shows this)
+
+Below that, we have the standard error of the residuals, which we won't interpret in this class. 
+
+Then we have the multiple and adjusted R-squared. These are estimates of the percentage of the variation in the outcome variable that our model explains. The very low values here suggest that this model is not explaining much at al.
+
+Finally, the f-statistic is a hypothesis test for whether _any_ of the covariates are significant. In this case, that test shows that none of them are (pvalue > 0.05).
+
+Right! Well, there's a very in-depth regression interpretation for you!
+
+Now it's time so see what a _significant_ regression looks like:
+
+```{r second regression}
+lm2 <- lm(asthma ~ ppov13_17, data = clean_places)
+summary(lm2)
+```
+
+## 2.1 Investigate and interpret the residual line
+
+## 2.2 Interpret the intercept.
+
+## 2.3 Interpret the coefficient for poverty. Make sure to note the sign, the magnitude, and the significance. Then state the models expectations for asthma in terms of poverty.
+
+## 2.4 What percentage of people does the model expect will have Asthma in a place where nobody is below the poverty line? What about a place where 50% of people are below the poverty line (where ppov13_17 = 0.5)?
+
+## 2.5 Describe three (3) ways you can tell the coefficient for poverty is significant. 
+
+
+# Part 3: Plotting Regression Results
+
+## 3.1 A a basic plot  
+  
+As you are no doubt now familiar, interpreting a regression table is somewhat... involved. It is often a good idea to present a visual interpretation of your regression alongside (or in lieu of) a table. 
+
+The simplest way of doing that is to plot the regression line. As I'm sure you recall, the intercept from the regression table is the intercept of our line--the expected value of the dependent variable (y) when the independet variable (x) is zero. The slope of the line is the coeffient estimate. If we extract those two values from our model, we can plot them as a line on our scatterplot from before.
+
+```{r simple regression plot}
+
+# extract our model estimates
+intercept <- lm2$coefficients[['(Intercept)']]
+slope <- lm2$coefficients[['ppov13_17']]
+
+## add them to the plot from before
+clean_places %>% ggplot(aes(ppov13_17, asthma))+
+  geom_point()+
+  # an abline is just a line with a slope and an intercept
+  geom_abline(slope = slope, intercept = intercept, linewidth = 2, color = 'blue')
+```
+  
+  
+Wow! So cool. We can see how the regression line is the 'best fit' line. The line that minimizes the distance from each point--that minimizes the residuals. If we moved this line even a little bit it would be closer to some points, but on average it would be not as close to all the points as this line is.
+
+It's nice to see the line on the points, but this plot only uses information from one column of our lovely regression table! It only shows us the model _estimates_ and tells us nothing about the standard error or the significance. We can improve this plot by including information not just about our expectation, but also about our uncertainty.
+
+
+## 3.2 A plot that also shows uncertainty
+
+To also plot the model's uncertainty actually takes a bit of effort. Doing it by hand is beyond the scope of the course (but come to office hours if your interested). In short, we'll need to create a version of the multinomial distribution implied by the intercept and coefficient estimates and standard errors. Using that distribution, we can draw a large sample of simulated intercept and coefficent values, and use those to make our plot. 
+
+Luckily the `ggeffects` package will do that for us. Install and load the package if you havent' already.
+
+We'll use a function called 'ggpredict' which will create our expected values. We pass the function our model, `lm2`, and the 'terms' we'd like predictions for. This is a vector of covariate names. We only have one covarity, so we pass it here.
+
+```{r}
+library(ggeffects)
+
+predictions <- ggpredict(lm2, terms = 'ppov13_17')
+predictions # check this out, predicted values across various levels fo poverty, with confidence intervals
+```
+  
+The function output is simple: predictions for different levels of poverty with a 95% confidence interval. That's useful -- because it's part of the unflattening process -- but what's really cool is that this predictions object has a built in plot method that makes a great plot with no fuss:
+  
+```{r}
+plot(predictions) # easy, but I'm not sure about the y-axis
+```
+
+  
+How about that! In black we can see our regression line, but in grey we see the uncertianty around the estimates. The model is more certian about the expectations for Asthma at lower values of poverty. 
+
+## 3.3 Why? 
+Look back at the other plots for this question. Why do you think the model is more uncertain at high levels of poverty?
+
+
+## 3.4 Plot improvements
+That plot is... much better than what we had before, but we can make it even better. First, for some variables it doeesn't matter, but here our outcome variable has a meaningful 0, so it's probably a good idea to include that in the plot. We can do that by adding a `ylim` argument to the plot.
+  
+```{r}
+plot(predictions) + ylim(0,18) # but can we put the data points back on there?
+```
+
+  
+It was also cool before to have our original data included in the plot. We can do that too, adding it to the plot essentially the same way. I've set the alpha level very low to make the regression line more visible.
+  
+```{r}
+plot(predictions) + ylim(0,18) +
+  geom_point(data = clean_places, aes(ppov13_17, asthma), alpha = 0.1)
+```
+
+That's a nice plot!
+
+Ok, now we'll get you some new data so that you can try this whole thing yourself.
+
+# Part 4 Getting data from the US census
+For the checkout, I want you to look at the relationship between income and education. For this lab, we'll address that question at the neighborhood level. So instead of using data about individuals, we'll use data about census tracts. Our research question will be: Do census tracts with more people with college degrees also have higher median incomes? 
 
 We can get data like that from the census, right in R. We can do this because the Census has something called an 'API', or an Application Programming Interface. If we send the Census API the right digital request, they'll send us the data we want. R has a tidy library called tidycensus which is a 'wrapper' around the census API. We can use the functions from tidycensus to easily request data. 
 
-The process is pretty simple. First, we decide on the variables and geograpies we want. Then, we look up the variable codes. Then we pass both the variables and the geograpies to the API. In this lab, I'll give you the codes and geographies, but in the next lab you'll look them up yourself.
+The process is pretty simple. First, we decide on the variables and geographies we want. Then, we look up the variable codes. Then we pass both the variables and the geographies to the API. In this lab, I'll give you the codes and geographies, but in the next lab you'll look them up yourself.
 
 ```{r}
 # this is a named list of variables and their codes for the api
@@ -39,35 +208,20 @@ acs21_tract <- get_acs('tract', state = 'IL', variables = vars) %>%
 Use the glimpse function in the console to examine your data. Right now we have the _number_ of people from each tract who have a bachelor's degree (who are over 25yo), but we actually want the proportion of people with a bachelor's degree. Good thing we also have the total number of people above 25. Make a chunk below this and use it to modify the data in `acs21_tract` to create a new variable called 'prop_ba' which is the proportion of people over 25 who have a BA.
 
 
-# Part 2 Exploration
-Ok, now we have nice fresh, clean census data, hot off the API. We want to explore our focal relationship. First, create a scatterplot. Then look at the correlation coefficent. Interpret both of them.
+# Lab 9 Checkout
 
-# Part 3 Running a Regression
+## 1) Explorator analysis
+Ok, now we have nice fresh, clean census data, hot off the API. We want to explore our focal relationship. First, create a scatterplot. Then look at the correlation coefficient. Interpret both of them.
+
+## 2) Running a Regression
 Using the `regression_example.R` file as a guide, run a regression examining the relationship between `prop_ba` and `med_hh_income`. 
 
 
-# Part 4 Interpreting Regression Results
-Use the `summary` function to print the results from your regression. Interpret the regression intercept and slope. Are the results significant? What does this mean about neighborhoods with many people who have BAs? Neighborhoods where not many people have BAs?
+## 3) Interpreting Regression Results
+Use the `summary` function to print the results from your regression. Interpret each part of the table. Are the results significant? What does this mean about neighborhoods with many people who have BAs? Neighborhoods where not many people have BAs?
 
 
-# Part 5 Plotting Regression Effects
-Using the `regression_example.R` file as a guide, plot the effects of your regression using the ggeffects package. 
-
-
-# Hints
-install.packages is your friend here :)
-
-Part 2
-ggplot()+
-gemo_point()
-
-Part 3
-The function to run a regression is `lm`, which stands for 'linear model'
-
-Part 4
-You need to pass your model object to the summary function. Make sure you saved your lm call in part 3 to a variable, and use summary on that variable.
-
-Part 5
-You can use the `ggpredict` or `ggeffect` functions to produce estimates of your dependent variable at various levels of your independent variable.
+## 4) Plotting Regression Effects
+Plot the predicted values of your regression using the ggeffects package. 
 
 
