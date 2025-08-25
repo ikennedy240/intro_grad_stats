@@ -404,13 +404,13 @@ Ok, now for the easiest part, but also the real statistics part. In chunk 5.4, u
 This lab includes some hard stuff. Don't worry, the checkout questions only check what you _need_ to continue to the next lab. You don't need to be able to do the whole simulation thing from part 4 from scratch!
 
 1. Estimate a population mean
-Estimate the population mean for household income, `hh_inc` in the `acs_df` data. Describe, in a sentence or two, the population of interest.
+Calculate a point estimate of the population mean for household income, `hh_inc` in the `acs_df` data. Describe, in a sentence or two, the population of interest.
 
 2. Calculate a confidence interval around our estimate
-Use the `ttest` function to calculate a 95% confidence interval around the mean for `hh_inc`.
+Use the `ttest` function to calculate a 95% confidence interval around the mean for `hh_inc`. Interpret the confidence interval in a sentence or two.
 
 3. Perform a t-test to compare two means
-Pick two states. Optionally plot the distribution of household incomes in those states. Compare the household income in those two states using a difference of means test and report your results.
+Pick two states. Optionally plot the distribution of household incomes in those states. Compare the household income in those two states using a difference of means test and report your results. Interpret 1. the obvserveed t value, 2. the degress of freedom, 3. the pvalue, 4.the alternative hypotheses, 5. the confidence interval, and 6. the sample estimates.
 
 4. Knit an Rmarkdown document  
 OK! You've finished the coding for lab 6. Just one thing left: knitting. Go ahead and press the knit button at the top of the source pane (it has a ball of yarn next to it). When I'm knitting it's common for me to get some errors, but maybe everything will go fine on the first go. If you get errors, I think they can be a little harder to interpret than regular R errors, so dont' be afraid to ask for help straightaway. 

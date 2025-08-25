@@ -66,7 +66,7 @@ df <- tibble(sd_value = '1', x = rnorm(n, mean = 0,sd = 1)) %>%
   # the second sample will have an sd of 2
   bind_rows(tibble(sd_value = '2', x = rnorm(n, mean = 0,sd = 2))) %>%
   # and the last sample will have an sd of 4
-  bind_rows(tibble(sd_value = '4', x = rnorm(n, mean = 0,sd = 4))) %>%
+  bind_rows(tibble(sd_value = '8', x = rnorm(n, mean = 0,sd = 8))) %>%
   # now I'm going to make the mean and sd values part of the dataframe
   # `group_by` lets me do calculations for each group!
   group_by(sd_value) %>%
@@ -118,7 +118,7 @@ df %>% ggplot(aes(x, group = sd_value, color = sd_value, fill = sd_value))+
 
 
 #  look what I'm doing to x in the mutate call!!! Try to figure it out, then ask your TA
-df <- df %>% mutate(x2=if_else(x>0,3*x,x)) %>% # what would this do when x = 2? -2? 0?
+df <- df %>% mutate(x2=if_else(x<0,3*x,x)) %>% # what would this do when x = 2? -2? 0?
   group_by(sd_value) %>%
   mutate(sd_mean = mean(x2), sd_median = median(x2)) %>%
   ungroup()

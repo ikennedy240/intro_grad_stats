@@ -203,6 +203,14 @@ tab1(clean_covid$restrictions, cum.percent = TRUE)
 # high           41      82          100
 #   Total        50     100          100
 
+#* This also let's us consider percentile ranks. Percentile ranks are
+#* Slightly different than cum. percent because they mean "this value
+#* is higher than X% of observations". So in the covid restrictions table
+#* The 'low' category are higher than 0% of observations, so they
+#* are in the 0th percentile. The medium category are higher than 6%
+#* of observations so they are in th 6th percentile, and the 'high' category
+#* are higher than 18% of observations so they are in the 18th percentile.
+
 ### LAB 2 CHECKOUT
 
 # Complete these exercises to move on to the next lab
