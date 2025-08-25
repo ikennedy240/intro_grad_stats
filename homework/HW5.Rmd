@@ -30,7 +30,7 @@ Imagine you're working as an hourly RA for a sociology professor, Dr. Neuquant. 
 
 # Part 2: Generic R problems
   
-Does voting behavior vary by social class? To find out, a political scientist questioned a random sample of 180
+2.1 Does voting behavior vary by social class? To find out, a political scientist questioned a random sample of 180
 registered voters about which candidate, A or B, they planned to support in the upcoming election for mayor. The
 researcher also questioned members of her sample concerning their perceived) social class membership – whether
 upper, middle, working, or lower. Her results are as follows:
@@ -41,7 +41,7 @@ Candidate A   18     36     16     12
 Candidate B   14     36     22     26
 ----------- ------ ------ ------- -----
 
-2.1 Based on the information provided, does there appear to be an association between social class and voting
+Based on the information provided, does there appear to be an association between social class and voting
 preferences in the sample of voters? Explain your answer.  
   
 2.2 Using chi-square, test the null hypothesis that voting behavior does not differ by social class. Use a .05 confidence
@@ -52,12 +52,14 @@ level for your test and show all calculations. Answer the following questions ba
   c. What is your decision about the null hypothesis?  
   d. What is your interpretation of the meaning of your decision?  
   e. If you doubled the count of cases in each of the cells of the table, would you reach the same decision about the hypothesis? Provide the key information used in making your decision?  
-
-2.3 Use a chi-squared test in R to assess the statistical significance of the association between GENDER and belief that global warming is a result of human activity. Use the "Environmental Attitudes” data available on the course website (data are called "nsee_modified.Rdata"). Gender is in the variable called "DEMOG_GENDER." For attitudes toward global warming, use the variable "BELIEVER_CAUSE" and differentiate between two categories: 1) those who believe warming is due to human activity (original code = 1); and 2) those who either believe warming is due to natural patterns (original code =2) plus those who believe it is due to  a combination of factors (original code = 3). Make sure to also get rid of any folks who refused to answer or were not asked the question.   
   
-  a.	Does there appear to be an association between gender and attitudes toward the causes of global warming in the sample? Explain your answer by referring to the results of the analysis.   
-  b.	Is the association between gender and attitudes toward the causes of global warming statistically significant?  How do you know and what does this mean?   
-  c.	Does your answer to Question b depend on the alpha level you use for the test? Why?  
+2.3 Did states with more covid restrictions experience fewer COVID cases? Using the data in `covid_state_data.csv`, investigate this problem.
+
+  a. Make and interpret density plots of the number of COVID cases, `total_cases`, depending on restriction level. 
+  b. What do you think accounts for the observed results? 
+  c. Look closely at the covid_state_data. Is there a way to account for any of the factors you identified in b? 
+  d. Try to account for at least one of the issues you describe in b and re-run the analysis (including a new plot!). 
+  e. Interpret your results from a-e.
 
 
 # Part 3: Your topic  
