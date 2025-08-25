@@ -35,7 +35,7 @@ library(tidycensus)
 # for a particular year and for a particular data source. Here we're asking for 
 # the variables from 2021 from the ACS 5-year estimates.
 
-acs_vars <- load_variables(2022, 'acs5')
+acs_vars <- load_variables(2021, 'acs5')
 
 # glimse what we got
 glimpse(acs_vars)
@@ -49,7 +49,7 @@ glimpse(acs_vars)
 # I'm using the function `str_detect` to find rows where the concept starts with
 # the phrase 'HISPANIC OR LATINO', the carrot ^ at the beginning tells R to look for
 # the phrase at the start of the string
-acs_vars %>% filter(str_detect(concept, regex('gini', ignore_case = TRUE))) %>%
+acs_vars %>% filter(str_detect(concept, '')) %>%
   # then I want to count the available concepts
   count(concept) %>% arrange(desc(n))
 
@@ -57,7 +57,7 @@ acs_vars %>% filter(str_detect(concept, regex('gini', ignore_case = TRUE))) %>%
 # 'HISPANIC OR LATINO ORIGIN BY RACE' let's look at those
 
 # this code filters to only concepts with the exact name 'HISPANIC OR LATINO ORIGIN BY RACE'
-acs_vars %>% filter(concept == 'Gini Index of Income Inequality') %>%
+acs_vars %>% filter(concept == 'HISPANIC OR LATINO ORIGIN BY RACE') %>%
   # selecting only these vars to make it easy to see
   select(name, label)
 

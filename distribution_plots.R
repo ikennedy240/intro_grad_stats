@@ -74,6 +74,19 @@ df <- tibble(sd_value = '1', x = rnorm(n, mean = 0,sd = 1)) %>%
   mutate(sample_mean = mean(x), sample_median = median(x), sample_sd = sd(x)) %>%
   ungroup()
 
+df <- tibble(sd_value = 'a', x = rnorm(n, mean = 0,sd = .5)) %>%
+  # the second sample will have an sd of 2
+  bind_rows(tibble(sd_value = 'b', x = rnorm(n, mean = 2,sd = .5))) %>%
+  # and the last sample will have an sd of 4
+  bind_rows(tibble(sd_value = 'c', x = rnorm(n, mean = 0,sd = 1.5))) %>%
+  bind_rows(tibble(sd_value = 'd', x = rnorm(n, mean = 2,sd = 1.5))) %>%
+  # now I'm going to make the mean and sd values part of the dataframe
+  # `group_by` lets me do calculations for each group!
+  group_by(sd_value) %>%
+  # this mutate will make different values, grouping based on `sd_value`
+  mutate(sample_mean = mean(x), sample_median = median(x), sample_sd = sd(x)) %>%
+  ungroup()
+
 
 # we can use `filter` to limit the data to the sd of 1
 # try adjusting this to look at data with an sd of 2 or 4
