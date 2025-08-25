@@ -50,7 +50,7 @@ Undergrads	Grads
 
 # Part 2: Generic R problems
   
-2.1 Load the covid data from `covid_state_data_fixed.csv`. To check the data loaded correctly, create some output that checks the column types, and output that contains examples of each column. These can be in the same output.
+2.1 Load the covid data from `covid_state_data.csv`. To check the data loaded correctly, create some output that checks the column types, and output that contains examples of each column. These can be in the same output.
 
 2.2 Create appropriate measures of central tendency and variability for these three variables: `earliest_case_month`, `restrictions`, and `total_cases`. Provide a brief interpretation of the measures you calculate. 
 

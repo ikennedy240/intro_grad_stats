@@ -8,7 +8,7 @@ Please answer all questions as completely as possible.  There are multiple parts
 
 # Part 1: Generic Problems  
    
-Recall that in HW3 you were provided with the following information on the number of hours spent studying per week by a sample of her undergraduate students and a sample of her graduate students.  
+1.1 Recall that in HW3 you were provided with the following information on the number of hours spent studying per week by a sample of her undergraduate students and a sample of her graduate students.  
   
 Undergrads	Grads
 ----------  -----
@@ -22,14 +22,34 @@ Undergrads	Grads
 ----------  -----  
   
 Use these data to assess the argument that average study time for the population of graduate students is greater than the average study time for the population of undergraduates.
-1.1 Is this a one-tailed or two tailed test? How do you know?
-1.2 If you assume a .05 alpha level, what is the critical value of the test statistic?
-1.3 What is the obtained value of the test statistic?
-1.4 Based on your results, can you reject the null hypothesis?
-1.5 What does this indicate about differences in study times between the two populations? Can you be confident that there is a difference in average study times between the two populations?
-1.6 Would your decision from Question 1.4 be different if you used an alpha level of .01? Explain.
-1.7 Would your decision from Question 1.4 be different if you changed your decision about whether this is a one- or
+a. Is this a one-tailed or two tailed test? How do you know?
+b. If you assume a .05 alpha level, what is the critical value of the test statistic?
+c. What is the obtained value of the test statistic?
+d. Based on your results, can you reject the null hypothesis?
+e. What does this indicate about differences in study times between the two populations? Can you be confident that there is a difference in average study times between the two populations?
+f. Would your decision from Question 1.4 be different if you used an alpha level of .01? Explain.
+g. Would your decision from Question 1.4 be different if you changed your decision about whether this is a one- or
 two-tailed test? Explain your answer.
+
+1.2 A researcher, Dr. Phillips, is interested in studying whether people are reluctant to interact with members of certain racial and ethnic groups. She designed an experiment in which students enrolled in a lecture course were asked to choose a discussion group (all meeting at the same time in the same building) based only on the racial/ethnic stereotype associated with the names of the teaching assistant. She observed the following registration counts: 
+
+Teaching Assistant	Students enrolled 
+------------------  -----------------
+Cheng	                20
+Goldberg	            37
+Jackson	              24
+Smith	                32
+Rodriguez	            15
+------------------  -----------------
+
+Use one-way chi-square to test the null hypothesis that the racial/ethnic name made no difference in students’ selection of a discussion group. Use a .05 confidence level and provide the following information (showing all calculations):   
+  
+a.	the degrees of freedom   
+b.	the critical value of the test statistic   
+c.	the obtained value of the test statistic  
+d.	your decision about the null hypothesis and the meaning of this decision  
+e.	Are the sample data sufficient to reject the null hypothesis using a .01 confidence level?   
+f. If you doubled the count of cases in each of the cells of the table, would you reach the same decision about the hypothesis? Provide the key information used in making your decision?  
 
 # Part 2: Generic R problems
   

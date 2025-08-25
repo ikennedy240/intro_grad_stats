@@ -42,7 +42,7 @@ effect.
 
 # Part 2: Generic R problems
   
-2.1 Use bivariate correlation and regression to explore the relationship between individuals’ income and the number of children in their household (we’ll assume for now that income is our dependent variable). Use the "Race, Gender, Work, and Wages" data available on the course website (data are called " CPS_2016_2021.Rdata"). For a demonstration of these techniques, see R Lab 8 on Bivariate Regression and Correlation.
+2.1 Use bivariate correlation and regression to explore the relationship between individuals’ income and the number of children in their household (we’ll assume for now that income is our dependent variable). Use the "Race, Gender, Work, and Wages" data available on the course website (data are called " CPS_2016_2021.Rdata"). For a demonstration of these techniques, see R Lab 9 on Bivariate Regression and Correlation.
   
 a.	Starting with the variable INCWAGE, create a variable indicating income from wages IN THOUSANDS OF DOLLARS. Make sure to first declare the numeric values for "MISSING” and “N.I.U.” cases in INCWAGE as NA before creating your new variable. Find and interpret the mean for the new variable.   
 b.	Find and interpret the mean for the variable NCHILD. Make sure to declare missing values as necessary.   
