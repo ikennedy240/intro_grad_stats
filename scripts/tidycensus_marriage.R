@@ -49,7 +49,7 @@ glimpse(acs_vars)
 # I'm using the function `str_detect` to find rows where the concept starts with
 # the phrase 'HISPANIC OR LATINO', the carrot ^ at the beginning tells R to look for
 # the phrase at the start of the string
-acs_vars %>% filter(str_detect(concept, '^HISPANIC OR LATINO')) %>%
+acs_vars %>% filter(str_detect(concept, '')) %>%
   # then I want to count the available concepts
   count(concept) %>% arrange(desc(n))
 

@@ -1,0 +1,77 @@
+---
+title: "Soc 502: HW5"
+output: pdf_document
+---
+
+# Instructions
+Please answer all questions as completely as possible.  There are multiple parts to this assignment.  Your answers to all parts should be recorded in a single document. **I strongly recommend completing Assignment 5 as a knitted rmarkdown document.** You may knit to html or pdf, or even to word if you prefer, your document should contain complete answers to all questions and include necessary statistics and figures. Submit BOTH your knitted file and your rmarkdown document. To help with that, there’s an rmarkdown version of this document on blackboard. If you opt not to use an rmarkdown document, you may continue to submit a word file with code and figures pasted in. Please also submit an r script with your code. Submit via the Blackboard course webpage by 11:59 pm on the due date indicated at the end of the syllabus. Contact Ian ([ikennedy@uic.edu](ikennedy@uic.edu)) early if you run into problems.   
+
+# Part 1: Generic Problems  
+
+1.1 Recall the experiment, run by Dr. Phillips, studying whether people are reluctant to interact with members of certain racial and ethnic groups. She designed an experiment in which students enrolled in a lecture course were asked to choose a discussion group (all meeting at the same time in the same building) based only on the racial/ethnic stereotype associated with the names of the teaching assistant. She observed the following registration counts: 
+
+Teaching Assistant	Students enrolled 
+------------------  -----------------
+Cheng	                20
+Goldberg	            37
+Jackson	              24
+Smith	                32
+Rodriguez	            15
+------------------  -----------------
+
+Imagine you're working as an hourly RA for a sociology professor, Dr. Neuquant. Professor Neuquant has a lot of content knowledge, but it's been a while since they took their statistics training classes. Imagine you've sent your analysis from Homework 4 (where you conducted a Chi-Square test) as a contribution to a paper you're working on together with Dr. Neuquant and Dr. Phillips. Below is an email that you've received as a response. Reply to the questions at the end of the email, and, if necessary, correct any misconceptions or misinterpretations you notice. Remember, though, that this a professional interaction, so make sure your reply email has a careful tone.
+
+> Dear Grad Student RA,
+> 
+> Thank you for your help with this analysis. It's really fun getting back into this quantitative work, and it's so easy and fast. Based on what you sent me, I want to take a stab at interpreting our results. First, in your analysis, you've used a 0.01 confidence level. Wouldn't it be better to use a 0.05 confidence level since that will make it easier to get significant results? Second, I noticed you've mentioned the possibility of an increased sample size. I might have a little bit of money I could share with Dr. Phillips so that we could collect more data. Should I do it? Finally, a collegue suggested that we use ANOVA for this problem. Do you think that would work with the data we have? If not, could you suggest some ways that we _could_ use ANOVA to investigate this question?
+> 
+> Respectfully,  
+> Dr. Neuquant
+
+# Part 2: Generic R problems
+  
+2.1 Does voting behavior vary by social class? To find out, a political scientist questioned a random sample of 180
+registered voters about which candidate, A or B, they planned to support in the upcoming election for mayor. The
+researcher also questioned members of her sample concerning their perceived) social class membership – whether
+upper, middle, working, or lower. Her results are as follows:
+
+            Upper  Middle Working Lower
+----------- ------ ------ ------- -----
+Candidate A   18     36     16     12
+Candidate B   14     36     22     26
+----------- ------ ------ ------- -----
+
+Based on the information provided, does there appear to be an association between social class and voting
+preferences in the sample of voters? Explain your answer.  
+  
+2.2 Using chi-square, test the null hypothesis that voting behavior does not differ by social class. Use a .05 confidence
+level for your test and show all calculations. Answer the following questions based on your results.  
+  
+  a. What is the critical value of your test statistic?  
+  b. What is the obtained/calculated value of the test statistic?  
+  c. What is your decision about the null hypothesis?  
+  d. What is your interpretation of the meaning of your decision?  
+  e. If you doubled the count of cases in each of the cells of the table, would you reach the same decision about the hypothesis? Provide the key information used in making your decision?  
+  
+2.3 Did states with more covid restrictions experience fewer COVID cases? Using the data in `covid_state_data.csv`, investigate this problem.
+
+  a. Make and interpret density plots of the number of COVID cases, `total_cases`, depending on restriction level. 
+  b. What do you think accounts for the observed results? 
+  c. Look closely at the covid_state_data. Is there a way to account for any of the factors you identified in b? 
+  d. Try to account for at least one of the issues you describe in b and re-run the analysis (including a new plot!). 
+  e. Interpret your results from a-e.
+
+
+# Part 3: Your topic  
+  
+3.1	State your focal relationship, identifying the focal independent variable and focal dependent variable.   
+
+3.2 Use R and the data provided for your topic to generate and interpret a chi-squared test to assess your focal
+association. For the sake of this assignment, you will need create categorical versions of your focal variables.
+Provide an interpretation of the results of your test. Do the results support your theoretical hypothesis about your
+focal relationship?  
+
+3.3 What do you see as the primary advantages and disadvantages of using a chi-squared to test your focal relationship?
+
+
+  
