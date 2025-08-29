@@ -32,18 +32,21 @@ Use these data to assess the argument that average study time for the population
 two-tailed test? Explain your answer.
 
 # Part 2: Generic R problems
-  
-After running through Lab 7, use a chi-squared test in R to assess the statistical significance of the association between GENDER and belief that global warming is a result of human activity. Use the "Environmental Attitudes” data available on the course website (data are called "nsee_modified.Rdata"). Gender is in the variable called "DEMOG_GENDER." For attitudes toward global warming, use the variable "BELIEVER_CAUSE" and differentiate between two categories: 1) those who believe warming is due to human activity (original code = 1); and 2) those who either believe warming is due to natural patterns (original code =2) plus those who believe it is due to  a combination of factors (original code = 3). Make sure to also get rid of any folks who refused to answer or were not asked the question.  
-
-2.1	Does there appear to be an association between gender and attitudes toward the causes of global warming in the sample? Explain your answer by referring to the results of the analysis.   
-2.2	Is the association between gender and attitudes toward the causes of global warming statistically significant?  How do you know and what does this mean?   
-2.3	Does your answer to Question b depend on the alpha level you use for the test? Why?  
+#### REPLACE THIS ####  
 
 
 # Part 3: Your topic  
   
 3.1	State your focal relationship, identifying the focal independent variable and focal dependent variable.   
-2.2	Use R and the data for your topic to generate and interpret a chi-squared test to assess your focal association. For the sake of this assignment, you will need create categorical versions of your focal variables.  Provide an interpretation of the results of your test. Do the results support your theoretical hypothesis about your focal relationship?   
-3.3	What do you see as the primary advantages and disadvantages of using a chi-squared to test your focal relationship? 
+3.2 Make a two-level categorical version of your focal independent variable. Make sure that it has just two levels or categories (either by collapsing existing categories or by splitting a numeric variable at its median).
+3.3 What would be the appropriate way to compare the mean of your focal dependent variable across the two values of your just-made categorical version of your independent variable? 
+3.4 Conduct the test you proposed in 3.3:
+a. Check the assumptions of your test
+b. Formally stating the hypotheses
+c. Examining the difference in the sample
+d. Identifying the confidence level and the critical value
+e. Calculating the test statistic
+f. Making a decision about the hypotheses
+g. Interpreting the results
 
   

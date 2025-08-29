@@ -356,3 +356,20 @@ huxreg(lm5)
 
 plot(pred_5)+geom_point(aes(AGE, INCTOT), data = cps_samp, alpha = .01)
 
+# -----------------
+
+
+lm1 <- lm(rent ~ white_prop, data = acs_21)
+
+lm2 <- lm(rent ~ poly(white_prop, 2, raw = TRUE), data = acs_21)
+
+lm3 <- lm(rent ~ white_prop + cook_county, data = acs_21)
+
+huxtable::huxreg(list('level' = lm1, 'poly' = lm2, '+county' = lm3))
+
+lm4 <- lm(rent ~ white_prop:cook_county, data = acs_21)
+
+lm5 <- lm(rent ~ white_prop + cook_county + white_prop:cook_county, data = acs_21)
+
+
+huxtable::huxreg(list('bivarate' = lm1, 'poly' = lm2, 'int' = lm4))

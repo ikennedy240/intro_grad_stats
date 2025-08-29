@@ -1,7 +1,8 @@
 library(tidyverse)
 load('data/PLACES_NaNDA_sample.Rdata')
 
-clean_places <- PLACES_NaNDA_sample %>% filter(!is.na(asthma),!is.na(popden13_17), !is.na(ppov13_17)) %>%
+clean_places <- PLACES_NaNDA_sample %>% 
+  filter(!is.na(asthma),!is.na(popden13_17), !is.na(ppov13_17)) %>%
   select(LocationID, asthma, popden13_17,ppov13_17)
 
 
@@ -31,6 +32,9 @@ summary(lm2)
 intercept <- lm2$coefficients[['(Intercept)']]
 slope <- lm2$coefficients[['ppov13_17']]
 
+
+lm3 <- lm(asthma ~ ppov13_17 + popden13_17, data = clean_places)
+summary(lm3)
 # plot the points and the line
 clean_places %>% ggplot(aes(ppov13_17, asthma))+
   geom_point()+
